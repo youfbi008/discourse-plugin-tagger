@@ -1,9 +1,43 @@
+Discourse.TagsSelectorComponent = Ember.Component.extend({
+	tagName: "input",
+	className: "tags-selector span7",
+	//template: function() {return ""},
+
+	autocompleteTemplate: Handlebars.compile("<div class='autocomplete'>" +
+                                    "<ul>" +
+                                    "{{#each options}}" +
+                                      "<li>" +
+                                          "{{this}}" +
+                                      "</li>" +
+                                      "{{/each}}" +
+                                    "</ul>" +
+                                  "</div>"),
+
+	didInsertElement: function(){
+	    var self = this;
+
+	    this.$().autocomplete({
+	      items: this.get('tags') || [],
+	      single: false,
+	      allowAny: true,
+	      dataSource: function() {return ["home", "office", "artic"];},
+	      template: this.autocompleteTemplate,
+	      onChangeItems: function(items) {
+	        self.set("tags", items);
+	      },
+	      //template: Discourse.TagsComponent.templateFunction(),
+	      transformComplete: function(item) {
+	      	return item;
+	      }
+	    });
+	    this.$().parent().width("auto");
+	}
+});
 
 Discourse.ComposerTagsView = Discourse.View.extend({
 	templateName: "composer_tagging",
 
 	model: Em.computed.alias('controller.model'),
-
 	insertTagsView: function() {
 		this._insertElementLater(function() {
 			var target = this._parentView.$();
@@ -16,9 +50,8 @@ Discourse.ComposerTagsView = Discourse.View.extend({
 
 Discourse.Composer.reopen({
 
+	// only creation of new topic and editing of first post are valid for us
 	can_be_tagged: function(){
-		// only creation of new topic and editing of first post are valid for us
-		console.log("asked");
 		return this.get("creatingTopic") || (
 			this.get("editingPost") && this.get("editingFirstPost"))
 	}.property("creatingTopic", "editingPost", "editingFirstPost")
