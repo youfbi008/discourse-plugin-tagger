@@ -4,6 +4,9 @@
 # authors: Benjamin Kampmann
 
 
+load File.expand_path('../lib/tagger/engine.rb', __FILE__)
+
+
 register_asset "javascripts/discourse/templates/composer_tagging.js.handlebars"
 register_asset "javascripts/composer_tagging.js"
 
@@ -25,3 +28,14 @@ register_css <<CSS
 }
 
 CSS
+
+after_initialize do
+
+  Discourse::Application.routes.append do
+    mount Tagger::Engine, at: '/tagger'
+  end
+
+  # add our tags to the topics
+  Topic.has_many(:tags, through: Tagger::Topictag)
+
+end
