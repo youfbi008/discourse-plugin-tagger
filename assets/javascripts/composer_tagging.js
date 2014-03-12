@@ -20,7 +20,14 @@ Discourse.TagsSelectorComponent = Ember.Component.extend({
 	      items: this.get('tags') || [],
 	      single: false,
 	      allowAny: true,
-	      dataSource: function() {return ["home", "office", "artic"];},
+	      dataSource: function(term) {
+	      	return Discourse.ajax('/tagger/tags', {
+	      							data: {
+      									search: term,
+      									limit: 5
+      								}
+      							});
+	      },
 	      template: this.autocompleteTemplate,
 	      onChangeItems: function(items) {
 	        self.set("tags", items);
