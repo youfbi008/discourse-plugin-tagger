@@ -17,7 +17,7 @@ Discourse.TagsSelectorComponent = Ember.Component.extend({
 	    var self = this;
 
 	    this.$().autocomplete({
-	      items: this.get('tags') || [],
+	      items: this.get('_parentView._parentView.model.topic.tags') || [],
 	      single: false,
 	      allowAny: true,
 	      dataSource: function(term) {
@@ -30,7 +30,7 @@ Discourse.TagsSelectorComponent = Ember.Component.extend({
 	      },
 	      template: this.autocompleteTemplate,
 	      onChangeItems: function(items) {
-	        self.set("tags", items);
+	        self.set("_parentView._parentView.model.tags", items);
 	      },
 	      //template: Discourse.TagsComponent.templateFunction(),
 	      transformComplete: function(item) {
@@ -48,9 +48,7 @@ Discourse.ComposerTagsView = Discourse.View.extend({
 	insertTagsView: function() {
 		this._insertElementLater(function() {
 			var target = this._parentView.$();
-			console.log(target);
       		target.append(this.$());
-      		console.log(this.get("model"));
       	}.bind(this));
 	}
 });
@@ -61,7 +59,44 @@ Discourse.Composer.reopen({
 	can_be_tagged: function(){
 		return this.get("creatingTopic") || (
 			this.get("editingPost") && this.get("editingFirstPost"))
-	}.property("creatingTopic", "editingPost", "editingFirstPost")
+	}.property("creatingTopic", "editingPost", "editingFirstPost"),
+
+	createPost: function(opts) {
+		var dfr = this._super(opts);
+		dfr.then(function(result){
+				var tagger = Discourse.ajax('/tagger/set_tags', {
+		      							data: {
+	      									tags: (this.get("tags") || []).join(","),
+	      									topic_id: result.post.topic_id
+	      								}
+	      							});
+				tagger.then(function(){
+					this.set("post.topic.tags", this.get("tags"));
+					return result;
+				}.bind(this))
+				return tagger;
+			}.bind(this));
+		return dfr
+	},
+
+	editPost: function(opts) {
+		var dfr = this._super(opts),
+			post = this.get("post");
+		// this promise never terminates as of now. not that we care
+		if (post.get('post_number') === 1){
+			// we are topic post: update tags, too
+			var after_tags = Discourse.ajax('/tagger/set_tags', {
+		      							data: {
+	      									tags: (this.get("tags") || []).join(","),
+	      									topic_id: post.get("topic_id")
+	      								}
+	      							});
+			after_tags.then(function() {
+				post.set("topic.tags", this.get("tags"));
+			}.bind(this));
+		}
+		return dfr
+	}
 
 });
 
@@ -74,7 +109,6 @@ Discourse.ComposerView.reopen({
 		var view = this.createChildView(Discourse.ComposerTagsView,
 			 {controller: this.get("controller")});
 		view.insertTagsView();
-		console.log(view);
 		this.set("tagsview", view)
 	}.on("didInsertElement")
 });

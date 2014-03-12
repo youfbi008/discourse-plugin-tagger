@@ -17,6 +17,13 @@ module Tagger
       render json: @tags.map{|tag| tag.title}.to_json
     end
 
+    def set_tags
+      @topic = Topic.find(params[:topic_id])
+      tag_names = params[:tags].split(",")
+      @topic.tags = Tag.all().where("title in (:tag_names)", tag_names: tag_names)
+      render json: true
+    end
+
     # GET /tags/1
     def show
     end
