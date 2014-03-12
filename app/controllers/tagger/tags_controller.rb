@@ -7,6 +7,14 @@ module Tagger
     # GET /tags
     def index
       @tags = Tag.all
+      if params[:search]
+        search = "%#{params[:search]}%"
+        @tags = @tags.where("title LIKE :search", search: search)
+      end
+      if params[:limit]
+        @tags = @tags.limit(params[:limit].to_i)
+      end
+      render json: @tags.map{|tag| tag.title}.to_json
     end
 
     # GET /tags/1
