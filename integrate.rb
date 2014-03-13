@@ -5,7 +5,7 @@
 # add our tags to the topics
 module TopicExtender
 	def self.included(klass)
-		klass.has_and_belongs_to_many :tags, class_name: "::Tagger::Tag"
+		klass.has_and_belongs_to_many :tags, autosave: true, class_name: "::Tagger::Tag"
 	end
 end
 

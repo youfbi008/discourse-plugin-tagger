@@ -1,8 +1,8 @@
-require_dependency "tagger/application_controller"
-
 module Tagger
-  class TagsController < ApplicationController
-    before_action :set_tag, only: [:show, :edit, :update, :destroy]
+  class TagsController < ActionController::Base
+    include CurrentUser
+
+    before_action :check_user
 
     # GET /tags
     def index
@@ -19,59 +19,36 @@ module Tagger
 
     def set_tags
       @topic = Topic.find(params[:topic_id])
+      if current_user.guardian.ensure_can_edit!(@topic)
+        render status: :forbidden, json: false
+        return
+      end
+
       tag_names = params[:tags].split(",")
-      @topic.tags = Tag.all().where("title in (:tag_names)", tag_names: tag_names)
+      tags = Tag.all().where("title in (:tag_names)", tag_names: tag_names)
+      if tags.length != tag_names and current_user.has_trust_level?(:leader)
+        # more tags given than currently found
+        # and the user is trusted to create tags
+        existing_tags = tags.map {|tag| tag.title}
+        tag_names.reject {|tag_name|
+          tag_name.length < 3 or existing_tags.include?(tag_name)
+          }
+        .each do |tag_name|
+          tags << Tag.create({title: tag_name}).save!()
+        end
+      end
+
+      @topic.tags = tags
       render json: true
-    end
-
-    # GET /tags/1
-    def show
-    end
-
-    # GET /tags/new
-    def new
-      @tag = Tag.new
-    end
-
-    # GET /tags/1/edit
-    def edit
-    end
-
-    # POST /tags
-    def create
-      @tag = Tag.new(tag_params)
-
-      if @tag.save
-        redirect_to @tag, notice: 'Tag was successfully created.'
-      else
-        render action: 'new'
-      end
-    end
-
-    # PATCH/PUT /tags/1
-    def update
-      if @tag.update(tag_params)
-        redirect_to @tag, notice: 'Tag was successfully updated.'
-      else
-        render action: 'edit'
-      end
-    end
-
-    # DELETE /tags/1
-    def destroy
-      @tag.destroy
-      redirect_to tags_url, notice: 'Tag was successfully destroyed.'
     end
 
     private
       # Use callbacks to share common setup or constraints between actions.
-      def set_tag
-        @tag = Tag.find(params[:id])
-      end
-
-      # Only allow a trusted parameter "white list" through.
-      def tag_params
-        params.require(:tag).permit(:title)
+      def check_user
+        if current_user.nil?
+          render status: :forbidden, json: false
+          return
+        end
       end
   end
 end
