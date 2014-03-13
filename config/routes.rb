@@ -1,4 +1,4 @@
 Tagger::Engine.routes.draw do
-  resources :tags
+  get "/tags" => "tags#index"
   get "/set_tags" => "tags#set_tags"
 end

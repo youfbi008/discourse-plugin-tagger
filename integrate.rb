@@ -19,7 +19,7 @@ module ExtendTopicViewSerializer
   end
 
 	def tags
-		object.topic.tags.each {|t| t.title} || []
+		object.topic.tags.map {|t| t.title} || []
 	end
 end
 
