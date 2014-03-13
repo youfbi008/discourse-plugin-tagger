@@ -39,7 +39,7 @@ module Tagger
       end
 
       @topic.tags = tags
-      render json: true
+      render json: @topic.tags.map{|t| t.title}
     end
 
     private

@@ -1,45 +1,89 @@
-Discourse.TagsSelectorComponent = Ember.Component.extend({
-	tagName: "input",
-	className: "tags-selector span7",
-	//template: function() {return ""},
+Discourse.TagsSelectorComponent = Ember.TextField.extend({
+	className: "tags-selector span4",
 
-	autocompleteTemplate: Handlebars.compile("<div class='autocomplete'>" +
-                                    "<ul>" +
-                                    "{{#each options}}" +
-                                      "<li>" +
-                                          "{{this}}" +
-                                      "</li>" +
-                                      "{{/each}}" +
-                                    "</ul>" +
-                                  "</div>"),
 
-	didInsertElement: function(){
-	    var self = this;
+    didInsertElement: function() {
+      this._super();
+      var _this = this;
+      var engine = new Bloodhound({
+      	remote: "/tagger/tags?search=%QUERY",
+      	datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.val); },
+  		queryTokenizer: Bloodhound.tokenizers.whitespace
+      });
 
-	    this.$().autocomplete({
-	      items: this.get('_parentView._parentView.model.topic.tags') || [],
-	      single: false,
-	      allowAny: true,
-	      dataSource: function(term) {
-	      	return Discourse.ajax('/tagger/tags', {
-	      							data: {
-      									search: term,
-      									limit: 5
-      								}
-      							});
-	      },
-	      template: this.autocompleteTemplate,
-	      onChangeItems: function(items) {
-	        self.set("_parentView._parentView.model.tags", items);
-	      },
-	      //template: Discourse.TagsComponent.templateFunction(),
-	      transformComplete: function(item) {
-	      	return item;
-	      }
-	    });
-	    this.$().parent().width("auto");
+	  engine.initialize();
+      this.typeahead = this.$().typeahead({
+	        name: "typeahead",
+	        minLength: 3,
+	        limit: this.get("limit") || 5,
+   		},{
+   			displayKey: function(x){ return x; }, // no transformation needed
+			source: engine.ttAdapter()
+      });
+
+      this.typeahead.on("typeahead:selected", function(ev, item) {
+        _this.addSelected(item);
+      });
+
+      this.typeahead.on("typeahead:autocompleted", function(ev, item) {
+        _this.addSelected(item);
+      });
+    },
+
+    addSelected: function(new_tag){
+		var tags = this.get("tags") || [],
+    		new_tag = new_tag.toLowerCase();
+
+    	if (tags.indexOf(new_tag) === -1 ){ // not found, add it
+    		tags.pushObject(new_tag);
+    		// this.set("tags", tags);
+	    }
+	    this.typeahead.val("");
 	}
 });
+// Discourse.TagsSelectorComponent = Ember.Component.extend({
+// 	tagName: "input",
+// 	className: "tags-selector span7",
+// 	//template: function() {return ""},
+
+// 	autocompleteTemplate: Handlebars.compile("<div class='autocomplete'>" +
+//                                     "<ul>" +
+//                                     "{{#each options}}" +
+//                                       "<li>" +
+//                                           "{{this}}" +
+//                                       "</li>" +
+//                                       "{{/each}}" +
+//                                     "</ul>" +
+//                                   "</div>"),
+
+// 	didInsertElement: function(){
+// 	    var self = this;
+
+// 	    this.$().autocomplete({
+// 	      items: this.get('_parentView._parentView.model.topic.tags') || [],
+// 	      single: false,
+// 	      allowAny: true,
+// 	      dataSource: function(term) {
+// 	      	return Discourse.ajax('/tagger/tags', {
+// 	      							data: {
+//       									search: term,
+//       									limit: 5
+//       								}
+//       							});
+// 	      },
+// 	      template: this.autocompleteTemplate,
+// 	      onChangeItems: function(items) {
+// 	      	console.log(items);
+// 	        self.set("_parentView._parentView.model.tags", items);
+// 	      },
+// 	      //template: Discourse.TagsComponent.templateFunction(),
+// 	      transformComplete: function(item) {
+// 	      	return item;
+// 	      }
+// 	    });
+// 	    this.$().parent().width("auto");
+// 	}
+// });
 
 Discourse.ComposerTagsView = Discourse.View.extend({
 	templateName: "composer_tagging",
@@ -63,6 +107,7 @@ Discourse.Composer.reopen({
 
 	createPost: function(opts) {
 		var dfr = this._super(opts);
+		console.log(this.get("tags"));
 		dfr.then(function(result){
 				var tagger = Discourse.ajax('/tagger/set_tags', {
 		      							data: {
@@ -70,14 +115,20 @@ Discourse.Composer.reopen({
 	      									topic_id: result.post.topic_id
 	      								}
 	      							});
-				tagger.then(function(){
-					this.set("post.topic.tags", this.get("tags"));
+				tagger.then(function(tag_res){
+					console.log(tag_res);
+					console.log(result.post);
+					result.post.set("tags", tag_res.tags);
 					return result;
-				}.bind(this))
-				return tagger;
+				}.bind(this));
+				return result;
 			}.bind(this));
-		return dfr
+		return dfr;
 	},
+
+	updateTags: function(){
+		this.set("tags", (this.get("post.topic.tags")|| []).copy())
+	}.observes("post", "topic", "draftKey"),
 
 	editPost: function(opts) {
 		var dfr = this._super(opts),
@@ -91,8 +142,8 @@ Discourse.Composer.reopen({
 	      									topic_id: post.get("topic_id")
 	      								}
 	      							});
-			after_tags.then(function() {
-				post.set("topic.tags", this.get("tags"));
+			after_tags.then(function(tag_res) {
+				post.set("topic.tags", tag_res.tags);
 			}.bind(this));
 		}
 		return dfr
