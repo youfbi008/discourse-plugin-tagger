@@ -107,10 +107,7 @@ Discourse.Composer.reopen({
 
 	createPost: function(opts) {
 		var dfr = this._super(opts),
-			new_promise = Ember.Deferred.promise(),
 			tags = (this.get("tags") || []);
-		// having to wrap promises as they don't know about
-		// deferred chaining
 		dfr.then(function(post_result){
 				var tagger = Discourse.ajax('/tagger/set_tags', {
 		      							data: {
@@ -120,10 +117,11 @@ Discourse.Composer.reopen({
 	      							});
 				tagger.then(function(tag_res){
 					//result.post.set("tags", tag_res.tags);
-					return new_promise.resolve(post_result)
+					return post_result;
 				});
+				return tagger;
 			});
-		return new_promise;
+		return dfr;
 	},
 
 	updateTags: function(){
