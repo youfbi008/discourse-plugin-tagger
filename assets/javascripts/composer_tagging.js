@@ -106,24 +106,24 @@ Discourse.Composer.reopen({
 	}.property("creatingTopic", "editingPost", "editingFirstPost"),
 
 	createPost: function(opts) {
-		var dfr = this._super(opts);
-		console.log(this.get("tags"));
-		dfr.then(function(result){
+		var dfr = this._super(opts),
+			new_promise = Ember.Deferred.promise(),
+			tags = (this.get("tags") || []);
+		// having to wrap promises as they don't know about
+		// deferred chaining
+		dfr.then(function(post_result){
 				var tagger = Discourse.ajax('/tagger/set_tags', {
 		      							data: {
-	      									tags: (this.get("tags") || []).join(","),
-	      									topic_id: result.post.topic_id
+	      									tags: tags.join(","),
+	      									topic_id: post_result.post.topic_id
 	      								}
 	      							});
 				tagger.then(function(tag_res){
-					console.log(tag_res);
-					console.log(result.post);
-					result.post.set("tags", tag_res.tags);
-					return result;
-				}.bind(this));
-				return result;
-			}.bind(this));
-		return dfr;
+					//result.post.set("tags", tag_res.tags);
+					return new_promise.resolve(post_result)
+				});
+			});
+		return new_promise;
 	},
 
 	updateTags: function(){
