@@ -2,6 +2,9 @@
  * typeahead.js 0.10.2
  * https://github.com/twitter/typeahead.js
  * Copyright 2013-2014 Twitter, Inc. and other contributors; Licensed MIT
+ * Changed by Benjamin Kampmann:
+ *    - added support to be informed about custom keys being puste
+ *    - trigger when "enter" is send without it completing the auto suggestions
  */
 
 (function($) {
@@ -956,6 +959,8 @@
                 this._managePreventDefault(keyName, $e);
                 if (keyName && this._shouldTrigger(keyName, $e)) {
                     this.trigger(keyName + "Keyed", $e);
+                } else {
+                    this.trigger("customKeyed", $e);
                 }
             },
             _onInput: function onInput() {
@@ -1427,6 +1432,7 @@
                 input: $input,
                 hint: $hint
             }).onSync("focused", this._onFocused, this).onSync("blurred", this._onBlurred, this).onSync("enterKeyed", this._onEnterKeyed, this).onSync("tabKeyed", this._onTabKeyed, this).onSync("escKeyed", this._onEscKeyed, this).onSync("upKeyed", this._onUpKeyed, this).onSync("downKeyed", this._onDownKeyed, this).onSync("leftKeyed", this._onLeftKeyed, this).onSync("rightKeyed", this._onRightKeyed, this).onSync("queryChanged", this._onQueryChanged, this).onSync("whitespaceChanged", this._onWhitespaceChanged, this);
+            if (o.customKeyed) this.input.onSync("customKeyed", o.customKeyed);
             this._setLanguageDirection();
         }
         _.mixin(Typeahead.prototype, {
@@ -1475,6 +1481,8 @@
                 } else if (this.autoselect && topSuggestionDatum) {
                     this._select(topSuggestionDatum);
                     $e.preventDefault();
+                } else {
+                    this.eventBus.trigger("enterKeyed", $e);
                 }
             },
             _onTabKeyed: function onTabKeyed(type, $e) {
@@ -1648,6 +1656,7 @@
                         eventBus: eventBus = new EventBus({
                             el: $input
                         }),
+                        customKeyed: o.customKeyed,
                         withHint: _.isUndefined(o.hint) ? true : !!o.hint,
                         minLength: o.minLength,
                         autoselect: o.autoselect,

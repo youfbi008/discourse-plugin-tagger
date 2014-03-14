@@ -1,9 +1,19 @@
+
 Discourse.TagsSelectorComponent = Ember.TextField.extend({
 	className: "tags-selector span4",
 
-
     didInsertElement: function() {
-      this._super();
+      	this._super();
+		this._start_typeahead();
+    },
+    keyUped: function(name, ev){
+    	if ([" ", ",", "."].indexOf(ev.key) > -1) {
+    		// separator keys make us commit
+    		this.addSelected(this.get("value"));
+    		ev.preventDefault();
+    	}
+    },
+    _start_typeahead: function(){
       var _this = this;
       var engine = new Bloodhound({
       	remote: "/tagger/tags?search=%QUERY",
@@ -16,6 +26,7 @@ Discourse.TagsSelectorComponent = Ember.TextField.extend({
 	        name: "typeahead",
 	        minLength: 3,
 	        limit: this.get("limit") || 5,
+	        customKeyed: this.keyUped.bind(this)
    		},{
    			displayKey: function(x){ return x; }, // no transformation needed
 			source: engine.ttAdapter()
@@ -23,6 +34,11 @@ Discourse.TagsSelectorComponent = Ember.TextField.extend({
 
       this.typeahead.on("typeahead:selected", function(ev, item) {
         _this.addSelected(item);
+      });
+
+      this.typeahead.on("typeahead:enterKeyed", function(ev){
+      	var val = _this.get("value");
+      	if (val.length > 2) _this.addSelected(val);
       });
 
       this.typeahead.on("typeahead:autocompleted", function(ev, item) {
@@ -34,56 +50,15 @@ Discourse.TagsSelectorComponent = Ember.TextField.extend({
 		var tags = this.get("tags") || [],
     		new_tag = new_tag.toLowerCase();
 
-    	if (tags.indexOf(new_tag) === -1 ){ // not found, add it
+    	if (new_tag.length > 2 && tags.indexOf(new_tag) === -1 ){ // not found, add it
     		tags.pushObject(new_tag);
     		// this.set("tags", tags);
 	    }
+	    this.set("value", "");
 	    this.typeahead.val("");
+	    $(this.typeahead).typeahead("close");
 	}
 });
-// Discourse.TagsSelectorComponent = Ember.Component.extend({
-// 	tagName: "input",
-// 	className: "tags-selector span7",
-// 	//template: function() {return ""},
-
-// 	autocompleteTemplate: Handlebars.compile("<div class='autocomplete'>" +
-//                                     "<ul>" +
-//                                     "{{#each options}}" +
-//                                       "<li>" +
-//                                           "{{this}}" +
-//                                       "</li>" +
-//                                       "{{/each}}" +
-//                                     "</ul>" +
-//                                   "</div>"),
-
-// 	didInsertElement: function(){
-// 	    var self = this;
-
-// 	    this.$().autocomplete({
-// 	      items: this.get('_parentView._parentView.model.topic.tags') || [],
-// 	      single: false,
-// 	      allowAny: true,
-// 	      dataSource: function(term) {
-// 	      	return Discourse.ajax('/tagger/tags', {
-// 	      							data: {
-//       									search: term,
-//       									limit: 5
-//       								}
-//       							});
-// 	      },
-// 	      template: this.autocompleteTemplate,
-// 	      onChangeItems: function(items) {
-// 	      	console.log(items);
-// 	        self.set("_parentView._parentView.model.tags", items);
-// 	      },
-// 	      //template: Discourse.TagsComponent.templateFunction(),
-// 	      transformComplete: function(item) {
-// 	      	return item;
-// 	      }
-// 	    });
-// 	    this.$().parent().width("auto");
-// 	}
-// });
 
 Discourse.ComposerTagsView = Discourse.View.extend({
 	templateName: "composer_tagging",
