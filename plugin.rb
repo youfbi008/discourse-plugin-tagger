@@ -12,6 +12,9 @@ register_asset "javascripts/vendor/typeahead.bundle.js"
 register_asset "javascripts/composer_tagging.js"
 register_asset "javascripts/topic_tags.js"
 
+# admin UI
+register_asset "javascripts/admin/tagging_menu.js", :admin
+
 register_css <<CSS
 
 /* topic view */
