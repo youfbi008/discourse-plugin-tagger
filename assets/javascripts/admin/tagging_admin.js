@@ -32,6 +32,14 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 			cur_model.set("expanded", false);
 			this.currentExpand = false;
 		},
+		deleteTag: function(cur_model){
+			if (!confirm("Are you sure you want to delete '" + cur_model.get("title") + "'?")) return;
+			cur_model.destroy().then(function(){
+				cur_model.set("expanded", false);
+				this.currentExpand = false;
+				this.removeObject(cur_model);
+			}.bind(this));
+		},
 		saveTag: function(tag){
 			var title = tag.get("new_title").toLowerCase();
 			if (!this.checkTagValid(title)) return;

@@ -12,9 +12,11 @@ Discourse.Tag = Discourse.Model.extend({
     });
   },
   destroy: function() {
-    if (this.get('newTag')) return Ember.RSVP.resolve();
-    return Discourse.ajax("/tagger/admin/" + this.get('id'), {
-      type: "DELETE"
+    return Discourse.ajax("/tagger/admin", {
+      type: "DELETE",
+      data: {
+        id: this.get("id")
+      }
     });
   }
 });
