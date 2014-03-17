@@ -13,12 +13,15 @@ register_asset "javascripts/composer_tagging.js"
 register_asset "javascripts/topic_tags.js"
 
 # admin UI
-register_asset "javascripts/admin/tagging_menu.js", :admin
+register_asset "javascripts/discourse/templates/tags_admin.js.handlebars"
+register_asset "javascripts/admin/tag_model.js", :admin
+register_asset "javascripts/admin/tagging_admin.js", :admin
 
 register_css <<CSS
 
 /* topic view */
 .tagger-tags .tagger-tag,
+.tagger-admin .tagger-tag,
 .tagger-tags-view span {
 	display: inline-block;
 	padding: 1px 7px;
@@ -27,9 +30,16 @@ register_css <<CSS
 }
 
 .tagger-tags .tagger-tag,
+.tagger-admin .tagger-tag,
 .tagger-tags-view span.tagger-tag {
 	background-color: #EDEDED;
 	color: #333;
+}
+
+.tagger-admin .tagger-tag {
+	font-size: 1.2em;
+    line-height: 2.8em;
+    cursor: pointer;
 }
 
 /* editor */

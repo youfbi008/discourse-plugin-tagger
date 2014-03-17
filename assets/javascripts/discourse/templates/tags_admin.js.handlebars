@@ -1,0 +1,28 @@
+<div class='admin-controls'>
+  <div class="pull-right">
+    {{textField value=newTagName placeholder="new tag"}}
+    <button {{action newTag}} class='btn btn-primary pull-right'>create Tag</button>
+  </div>
+  <div class='span6 tagname controls'>
+    {{textField value=tagname placeholder="filter tags"}}
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="tagger-admin">
+    {{#each model}}
+     {{#if this.expanded}}
+      <div class="tagger-tag">
+          {{textField className="span3" value=new_title}}
+          <button class='btn btn-small ok no-text' {{action saveTag this}}><i class='fa fa-check'></i></button>
+          <button class='btn btn-small' {{action mergeTag this}}><i class='fa fa-code-fork'></i>merge</button>
+          <button class='btn btn-small cancel' {{action deleteTag this}}><i class='fa fa-trash-o'></i>delete</button>
+          <button class='btn btn-small no-text' {{action cancelExpand this}}><i class='fa fa-times'></i></button>
+      </div>
+     {{else}}
+      <span {{action expandTag this}} class="tagger-tag">{{this.title}}</span>
+     {{/if}}
+    {{/each}}
+  </div>
+</div>
