@@ -12,11 +12,14 @@ class CreateTaggerTags < ActiveRecord::Migration
 
       # t.timestamps
     end
+
+    add_index :tagger_tags_topics, [:topic_id, :tag_id], :unique => true
   end
 
   def down
    	drop_table :tagger_tags
    	drop_table :tagger_tags_topics
+    remove_index :tagger_tags_topics, [:topic_id, :tag_id]
   end
 
 end
