@@ -16,7 +16,11 @@ Discourse.TaggerRoute = Discourse.AdminRoute.extend({
 
 //Discourse.TaggerAdminView = Discourse.View.extend(Discourse.ScrollTop);
 
-Discourse.TaggerAdminController = Discourse.Controller.extend({
+Discourse.TaggerAdminController = Ember.ArrayController.extend({
+
+	sortProperties: ["title", "id"],
+	sortAscending: true,
+
 	actions: {
 		expandTag: function(new_model){
 			if (this.currentExpand) this.currentExpand.set("expanded", false);
@@ -56,6 +60,15 @@ Discourse.TaggerAdminController = Discourse.Controller.extend({
 			});
 		}
 	},
+
+	filteredContent: function(){
+		var filter = this.get("tagname");
+		if (!filter) return this.get("arrangedContent");
+		var regexp = RegExp(".*" + filter + ".*");
+		return this.get("arrangedContent").filter(function(itm){
+			return itm.get("title").match(regexp) != null;
+		});
+	}.property("arrangedContent", "tagname"),
 
 	checkTagValid: function(new_tag){
 		return new_tag.length >= 3 && this.isUnique(new_tag);

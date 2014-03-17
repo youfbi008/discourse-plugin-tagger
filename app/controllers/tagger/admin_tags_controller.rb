@@ -1,7 +1,7 @@
 module Tagger
   class AdminTagsController < Admin::AdminController
     def show
-      tags = Tag.all
+      tags = Tag.all.order(:title)
       render json: tags.to_json
     end
 

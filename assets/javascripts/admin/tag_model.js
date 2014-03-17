@@ -11,13 +11,6 @@ Discourse.Tag = Discourse.Model.extend({
       }
     });
   },
-
-  /**
-    Destroy the badge.
-
-    @method destroy
-    @returns {Promise} A promise that resolves to the server response
-  **/
   destroy: function() {
     if (this.get('newTag')) return Ember.RSVP.resolve();
     return Discourse.ajax("/tagger/admin/" + this.get('id'), {
