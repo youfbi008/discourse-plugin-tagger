@@ -20,7 +20,9 @@ module Tagger
     end
 
     def destroy
-      find_tag.destroy
+      tag = find_tag
+      tag.topic.delete_all()
+      tag.destroy
       render nothing: true
     end
 
