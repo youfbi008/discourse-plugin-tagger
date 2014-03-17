@@ -8,21 +8,31 @@
   </div>
 </div>
 
-
 <div class="row">
-  <div class="tagger-admin">
-    {{#each filteredContent}}
-     {{#if this.expanded}}
-      <div class="tagger-tag">
-          {{textField className="span3" value=new_title}}
-          <button class='btn btn-small ok no-text' {{action saveTag this}}><i class='fa fa-check'></i></button>
-          <button class='btn btn-small' {{action mergeTag this}}><i class='fa fa-code-fork'></i>merge</button>
-          <button class='btn btn-small cancel' {{action deleteTag this}}><i class='fa fa-trash-o'></i>delete</button>
-          <button class='btn btn-small no-text' {{action cancelExpand this}}><i class='fa fa-times'></i></button>
+  {{#if toMerge}}
+    <div class="tagger-admin alert-info">
+      <div class="alert alert-error">
+        <h3>Merging</h3>
+        <p>Please select the Tag you want <strong>'{{toMerge.title}}'</strong> to be merged into or <button {{action cancelMergeTag}} class='btn btn-primary'>cancel merging</button></p>
       </div>
-     {{else}}
-      <span {{action expandTag this}} class="tagger-tag">{{this.title}}</span>
-     {{/if}}
-    {{/each}}
+      {{#each filteredContent}}
+        <span {{action confirmMergeTag this}} class="tagger-tag">{{this.title}}</span>
+      {{/each}}
+  {{else}}
+    <div class="tagger-admin">
+      {{#each filteredContent}}
+       {{#if this.expanded}}
+        <div class="tagger-tag">
+            {{textField className="span3" value=new_title}}
+            <button class='btn btn-small ok no-text' {{action saveTag this}}><i class='fa fa-check'></i></button>
+            <button class='btn btn-small' {{action startMergeTag this}}><i class='fa fa-code-fork'></i>merge</button>
+            <button class='btn btn-small cancel' {{action deleteTag this}}><i class='fa fa-trash-o'></i>delete</button>
+            <button class='btn btn-small no-text' {{action cancelExpand this}}><i class='fa fa-times'></i></button>
+        </div>
+       {{else}}
+        <span {{action expandTag this}} class="tagger-tag">{{this.title}}</span>
+       {{/if}}
+      {{/each}}
+    {{/if}}
   </div>
 </div>

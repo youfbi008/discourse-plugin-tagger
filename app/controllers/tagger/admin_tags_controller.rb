@@ -19,6 +19,15 @@ module Tagger
       render json: tag.to_json
     end
 
+    def merge
+      source_tag = Tag.find(params[:source_id])
+      target_tag = Tag.find(params[:target_id])
+      target_tag.topic.union(source_tag.topic)
+      source_tag.topic.delete_all
+      source_tag.destroy
+      render json: target_tag.to_json
+    end
+
     def destroy
       tag = find_tag
       tag.topic.delete_all()

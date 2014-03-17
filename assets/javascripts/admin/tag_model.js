@@ -11,6 +11,15 @@ Discourse.Tag = Discourse.Model.extend({
       }
     });
   },
+  merge: function(source){
+    return Discourse.ajax("/tagger/admin/merge", {
+      type: "POST",
+      data: {
+        target_id: this.get("id"),
+        source_id: source.get("id")
+      }
+    });
+  },
   destroy: function() {
     return Discourse.ajax("/tagger/admin", {
       type: "DELETE",

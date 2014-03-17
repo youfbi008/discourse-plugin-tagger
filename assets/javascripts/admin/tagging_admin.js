@@ -40,6 +40,20 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 				this.removeObject(cur_model);
 			}.bind(this));
 		},
+		startMergeTag: function(cur_model){
+			this.currentExpand = false;
+			this.set("toMerge", cur_model);
+		},
+		cancelMergeTag: function(){
+			this.set("toMerge", false);
+		},
+		confirmMergeTag: function(target){
+			source = this.get("toMerge");
+			target.merge(source).then(function(){
+				this.removeObject(source);
+				this.set("toMerge", false);
+			}.bind(this));
+		},
 		saveTag: function(tag){
 			var title = tag.get("new_title").toLowerCase();
 			if (!this.checkTagValid(title)) return;
