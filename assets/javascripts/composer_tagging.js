@@ -9,7 +9,7 @@ Discourse.TagsSelectorComponent = Ember.TextField.extend({
     keyUped: function(name, ev){
     	if ([" ", ",", "."].indexOf(ev.key) > -1) {
     		// separator keys make us commit
-    		this.addSelected(this.get("value"));
+    		if (Discourse.User.current().get("canAddNewTags")) this.addSelected(this.get("value"));
     		ev.preventDefault();
     	}
     },
@@ -38,7 +38,7 @@ Discourse.TagsSelectorComponent = Ember.TextField.extend({
 
       this.typeahead.on("typeahead:enterKeyed", function(ev){
       	var val = _this.get("value");
-      	if (val.length > 2) _this.addSelected(val);
+      	if (Discourse.User.current().get("canAddNewTags") && val.length > 2) _this.addSelected(val);
       });
 
       this.typeahead.on("typeahead:autocompleted", function(ev, item) {

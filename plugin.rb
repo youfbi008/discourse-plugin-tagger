@@ -6,6 +6,7 @@
 # load the engine
 load File.expand_path('../lib/tagger/engine.rb', __FILE__)
 
+register_asset "javascripts/user_tag_patches.js"
 register_asset "javascripts/discourse/templates/composer_tagging.js.handlebars"
 register_asset "javascripts/discourse/templates/topic_tags.js.handlebars"
 register_asset "javascripts/vendor/typeahead.bundle.js"
