@@ -3,7 +3,7 @@
 <label>Tags:</label>
 	{{#if model.tags.length}}
 		{{#each model.tags}}
-			<span class="tagger-tag" >{{this}}</span>
+			<span class="tagger-tag" >{{this}} <i {{action removeTag this }} class='fa fa-times'></i></span>
 		{{/each}}
 	{{/if}}
   {{tags-selector tags=model.tags}}

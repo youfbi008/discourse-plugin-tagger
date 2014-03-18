@@ -52,6 +52,10 @@ register_css <<CSS
     left: 40%;
 }
 
+.tagger-tags .tagger-tag .fa {
+	cursor: pointer
+}
+
 .tagger-tags label {
 	display: inline;
 }

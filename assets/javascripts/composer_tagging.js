@@ -124,6 +124,13 @@ Discourse.Composer.reopen({
 
 });
 
+Discourse.ComposerController.reopen({
+	actions: {
+		removeTag: function(toRm){
+			this.get("content.tags").removeObject(toRm.toString());
+		}
+	},
+});
 
 Discourse.ComposerView.reopen({
 	insertTagsView: function() {
