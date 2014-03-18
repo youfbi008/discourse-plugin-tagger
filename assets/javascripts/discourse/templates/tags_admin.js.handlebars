@@ -18,6 +18,7 @@
       {{#each filteredContent}}
         <span {{action confirmMergeTag this}} class="tagger-tag">{{this.title}}</span>
       {{/each}}
+    </div>
   {{else}}
     <div class="tagger-admin">
       {{#each filteredContent}}
@@ -33,6 +34,6 @@
         <span {{action expandTag this}} class="tagger-tag">{{this.title}}</span>
        {{/if}}
       {{/each}}
-    {{/if}}
-  </div>
+    </div>
+  {{/if}}
 </div>
