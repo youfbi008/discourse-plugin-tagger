@@ -13,11 +13,11 @@ A simple Plugin to allow users to attach labels (so called "tags") to their topi
 Just two easy steps. From your main discourse do:
 
     cd plugins
-    git clone https://github.com/werweisswas/discourse-plugin-tagger.gitgit   # clone the repo here
+    git clone https://github.com/werweisswas/discourse-plugin-tagger.git   # clone the repo here
     cd ..
-    expoert RAILS_ENV=production                # set to productions
+    export RAILS_ENV=production                 # set to productions
     rake tagger:install:migrations              # copy migrations
-    rake db:RAILS_ENV=production SCOPE=tagger   # run migrations
+    rake db:migrate SCOPE=tagger                # run migrations
     rake assets:precompile                      # precompile assets
 
 Then restart your discourse and enjoy the fun on ever /user/*/activity-page.
