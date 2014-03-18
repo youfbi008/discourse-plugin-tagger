@@ -34,7 +34,9 @@ module Tagger
           tag_name.length < 3 or existing_tags.include?(tag_name)
           }
         .each do |tag_name|
-          tags << Tag.create({title: tag_name}).save!()
+          new_tag = Tag.create({title: tag_name})
+          new_tag.save!
+          tags << new_tag
         end
       end
 
