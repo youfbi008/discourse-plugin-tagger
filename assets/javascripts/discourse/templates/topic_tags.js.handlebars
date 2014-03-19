@@ -2,7 +2,7 @@
 	<div class="tagger-tags-view">
 		<span>tagged:</span>
 		{{#each model.tags}}
-			<span class="tagger-tag">{{this}}</span>
+			<span {{action searchTag this }} class="tagger-tag">{{this}}</span>
 		{{/each}}
 	</div>
 {{/if}}

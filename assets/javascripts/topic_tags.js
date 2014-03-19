@@ -18,6 +18,21 @@ Discourse.TagsView = Discourse.View.extend({
 	}
 });
 
+Discourse.TopicController.reopen({
+       actions: {
+               searchTag: function(tag){
+                       console.log(tag);
+                       if (Discourse.TopicSearch){
+                               // search plugins support
+                       var topicSearch = Discourse.TopicSearch.create();
+                       topicSearch.set('query', "[" + tag + "]");
+                       console.log(topicSearch);
+                       this.transitionToRoute('topics_search', topicSearch);
+                       }
+               },
+       }
+});
+
 Discourse.TopicView.reopen({
 	insertTagsView: function() {
 		if (this.get("tagsview")) return;
