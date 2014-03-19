@@ -23,6 +23,7 @@ register_css <<CSS
 /* topic view */
 .tagger-tags .tagger-tag,
 .tagger-admin .tagger-tag,
+.tagger-tags-view a,
 .tagger-tags-view span {
 	display: inline-block;
 	padding: 1px 7px;
@@ -32,6 +33,7 @@ register_css <<CSS
 
 .tagger-tags .tagger-tag,
 .tagger-admin .tagger-tag,
+.tagger-tags-view a.tagger-tag,
 .tagger-tags-view span.tagger-tag {
 	background-color: #EDEDED;
 	color: #333;

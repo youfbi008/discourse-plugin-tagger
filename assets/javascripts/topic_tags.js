@@ -19,16 +19,10 @@ Discourse.TagsView = Discourse.View.extend({
 });
 
 Discourse.TopicController.reopen({
-       actions: {
-               searchTag: function(tag){
-                       if (Discourse.TopicSearch){
-                            // search plugins support
-                           var topicSearch = Discourse.TopicSearch.create();
-                           topicSearch.set('query', "[" + tag + "]");
-                           this.transitionToRoute('topics_search', topicSearch);
-                       }
-               },
-       }
+  canSearch: Em.computed(function(){
+    // we have the search-plugin installed - yay
+    return Discourse.TopicSearchController !== undefined;
+  }).property()
 });
 
 Discourse.TopicView.reopen({
