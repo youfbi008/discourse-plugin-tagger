@@ -30,8 +30,6 @@ class Search
 	alias_method :find_grouped_results_pre_tags, :find_grouped_results
 
 	def find_grouped_results
-		puts "!!!!!!!!!!" * 20
-		puts @term
 		match = /\[.?\]/.match(@term)
 		return tagged_search(match[1]) if match and match[1].length > 2
 
@@ -41,8 +39,10 @@ class Search
   def tagged_search(tag_name)
   	# tag based search
 	  tag = Tagger::Tag.find_by(:title, tag_name)
-	  posts = posts_query(@limit)
-	  						.where(post_number: 1)
+	  posts = Post.where("topics.deleted_at" => nil)
+                  .where("topics.visible")
+                  .where("topics.archetype <> ?", Archetype.private_message)
+                  .where(post_number: 1)
 	              .where("topics.id in (?)", tag.topic_ids) # I bet we can make this more efficient
 
 	  posts.each do |p|
