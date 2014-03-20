@@ -9,6 +9,7 @@ load File.expand_path('../lib/tagger/engine.rb', __FILE__)
 register_asset "javascripts/user_tag_patches.js"
 register_asset "javascripts/discourse/templates/composer_tagging.js.handlebars"
 register_asset "javascripts/discourse/templates/topic_tags.js.handlebars"
+register_asset "javascripts/discourse/templates/tag_topic_list_head.js.handlebars"
 register_asset "javascripts/vendor/typeahead.bundle.js"
 register_asset "javascripts/composer_tagging.js"
 register_asset "javascripts/topic_tags.js"
@@ -22,6 +23,7 @@ register_css <<CSS
 
 /* topic view */
 .tagger-tags .tagger-tag,
+h3 .tagger-tag,
 .tagger-admin .tagger-tag,
 .tagger-tags-view a,
 .tagger-tags-view span {
@@ -33,6 +35,7 @@ register_css <<CSS
 
 .tagger-tags .tagger-tag,
 .tagger-admin .tagger-tag,
+h3 .tagger-tag,
 .tagger-tags-view a.tagger-tag,
 .tagger-tags-view span.tagger-tag {
 	background-color: #EDEDED;

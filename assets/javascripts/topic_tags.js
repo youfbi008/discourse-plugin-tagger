@@ -54,3 +54,34 @@ Discourse.TopicView.reopen({
         }
     }.on("willDestroyElement")
 });
+
+// topics of tags views
+
+Discourse.TaggedTagRoute = Discourse.Route.extend({
+  model: function(params){
+    this.set("tag", params.tag)
+    return Discourse.TopicList.find("tagger/tag/" + params.tag, {})
+  },
+   setupController: function(controller, model) {
+     this.controllerFor('discoveryTopics').setProperties({
+        "model": model,
+        "tagname": this.get("tag")
+      });
+   },
+  renderTemplate: function() {
+    var controller = this.controllerFor('discoveryTopics');
+    this.render('tag_topic_list_head', { controller: controller, outlet: 'navigation-bar' });
+    this.render('discovery/topics', { controller: controller, outlet: 'list-container'});
+  }
+});
+
+Discourse.TaggedView = Discourse.View.extend({
+  templateName: "discovery"
+});
+
+Discourse.Route.buildRoutes(function() {
+  this.resource('tagged', {path: "tag"}, function() {
+    this.route('tag', { path: '/:tag' });
+//    this.route('cloud', { path: '/' });
+  });
+});

@@ -1,14 +1,8 @@
 {{#if model.tags}}
 	<div class="tagger-tags-view">
 		<span>tagged:</span>
-        {{#if canSearch }}
-		  {{#each model.tags}}
-			<a href="/topics/search/q/[{{unbound this}}]" class="tagger-tag">{{this}}</a>
-		  {{/each}}
-        {{else}}
-        {{#each model.tags}}
-            <span class="tagger-tag">{{this}}</span>
-          {{/each}}
-        {{/if}}
+	  {{#each model.tags}}
+		<a href="/tag/{{unbound this}}" class="tagger-tag">{{this}}</a>
+	  {{/each}}
 	</div>
 {{/if}}
