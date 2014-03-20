@@ -47,7 +47,8 @@ Discourse.TagsSelectorComponent = Ember.TextField.extend({
     },
 
     addSelected: function(new_tag){
-		var tags = this.get("tags") || [],
+        if (!this.get("tags")) this.set("tags", [])
+		var tags =  this.get("tags"),
     		new_tag = new_tag.toLowerCase();
 
     	if (new_tag.length > 2 && tags.indexOf(new_tag) === -1 ){ // not found, add it
@@ -91,7 +92,6 @@ Discourse.Composer.reopen({
 	      								}
 	      							});
 				tagger.then(function(tag_res){
-					//result.post.set("tags", tag_res.tags);
 					return post_result;
 				});
 				return tagger;
@@ -100,23 +100,25 @@ Discourse.Composer.reopen({
 	},
 
 	updateTags: function(){
-		this.set("tags", (this.get("post.topic.tags")|| []).copy())
+        if (!this.get("tags")) this.set("tags", []);
+        this.get("tags").setObjects((this.get("topic.tags") || []));
 	}.observes("post", "topic", "draftKey"),
 
 	editPost: function(opts) {
 		var dfr = this._super(opts),
-			post = this.get("post");
+			post = this.get("post"),
+            tags = this.get("tags") || [];
 		// this promise never terminates as of now. not that we care
 		if (post.get('post_number') === 1){
 			// we are topic post: update tags, too
 			var after_tags = Discourse.ajax('/tagger/set_tags', {
 		      							data: {
-	      									tags: (this.get("tags") || []).join(","),
+	      									tags: tags.join(","),
 	      									topic_id: post.get("topic_id")
 	      								}
 	      							});
 			after_tags.then(function(tag_res) {
-				post.set("topic.tags", tag_res.tags);
+				post.get("topic.tags").setObjects(tag_res.tags);
 			}.bind(this));
 		}
 		return dfr
