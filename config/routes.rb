@@ -5,5 +5,6 @@ Tagger::Engine.routes.draw do
       end
     end
   get "/tags" => "tags#index"
+  get "/tag/:tag" => "tags#get_topics_per_tag"
   get "/set_tags" => "tags#set_tags"
 end

@@ -1,8 +1,8 @@
 module Tagger
-  class TagsController < ActionController::Base
+  class TagsController < ApplicationController
     include CurrentUser
 
-    before_action :check_user
+    before_action :check_user, only: [:set_tags]
 
     # GET /tags
     def index
@@ -15,6 +15,15 @@ module Tagger
         @tags = @tags.limit(params[:limit].to_i)
       end
       render json: @tags.map{|tag| tag.title}.to_json
+    end
+
+    def get_topics_per_tag
+      params.require(:tag)
+      @tag = Tag.find_by("title = ?", params[:tag])
+      return render json: false if @tag.blank?
+
+      list = TopicList.new(:tag, current_user, topics_query)
+      render_serialized(list, TopicListSerializer)
     end
 
     def set_tags
@@ -51,6 +60,15 @@ module Tagger
           render status: :forbidden, json: false
           return
         end
+      end
+
+      def topics_query(options={})
+       topics = Topic.where("deleted_at" => nil)
+                    .where("visible")
+                    .where("archetype <> ?", Archetype.private_message)
+                    .where("id in (SELECT topic_id FROM tagger_tags_topics WHERE tag_id = ?)", @tag.id)
+
+        return topics
       end
   end
 end

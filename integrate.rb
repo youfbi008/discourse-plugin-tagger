@@ -25,34 +25,6 @@ end
 
 TopicViewSerializer.send(:include, ExtendTopicViewSerializer)
 
-# add searchability
-class Search
-	alias_method :find_grouped_results_pre_tags, :find_grouped_results
-
-	def find_grouped_results
-		match = /\[.?\]/.match(@term)
-		return tagged_search(match[1]) if match and match[1].length > 2
-
-		find_grouped_results_pre_tags
-	end
-
-  def tagged_search(tag_name)
-  	# tag based search
-	  tag = Tagger::Tag.find_by(:title, tag_name)
-	  posts = Post.where("topics.deleted_at" => nil)
-                  .where("topics.visible")
-                  .where("topics.archetype <> ?", Archetype.private_message)
-                  .where(post_number: 1)
-	              .where("topics.id in (?)", tag.topic_ids) # I bet we can make this more efficient
-
-	  posts.each do |p|
-	    @results.add_result(SearchResult.from_topic(p.topic))
-	  end
-
-  end
-end
-
-
 # And mount the engine
 Discourse::Application.routes.append do
 	mount Tagger::Engine, at: '/tagger'
