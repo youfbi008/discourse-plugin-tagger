@@ -17,6 +17,20 @@ module Tagger
       render json: @tags.map{|tag| tag.title}.to_json
     end
 
+    def cloud
+      discourse_expires_in 15.minutes
+      @highest = 0
+      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
+                    .group("tagger_tags.id")
+                    .joins(:topic)
+      tags = query.map do |item|
+            count = item.count_before_type_cast.to_i
+            @highest = count if count > @highest
+            { title: item.title, count: count}
+          end
+      render json: {max: @highest, cloud: tags}
+    end
+
     def get_topics_per_tag
       params.require(:tag)
       @tag = Tag.find_by("title = ?", params[:tag])

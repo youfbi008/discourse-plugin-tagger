@@ -75,6 +75,16 @@ Discourse.TaggedTagRoute = Discourse.Route.extend({
   }
 });
 
+Discourse.TaggedCloudRoute = Discourse.Route.extend({
+  model: function(){
+    return Discourse.ajax("/tagger/tags/cloud")
+  },
+  renderTemplate: function() {
+    //this.render('tag_topic_list_head', { controller: controller, outlet: 'navigation-bar' });
+    this.render('tag_cloud', { outlet: 'list-container'});
+  }
+});
+
 Discourse.TaggedView = Discourse.View.extend({
   templateName: "discovery"
 });
@@ -82,6 +92,6 @@ Discourse.TaggedView = Discourse.View.extend({
 Discourse.Route.buildRoutes(function() {
   this.resource('tagged', {path: "tag"}, function() {
     this.route('tag', { path: '/:tag' });
-//    this.route('cloud', { path: '/' });
+    this.route('cloud', { path: '/' });
   });
 });
