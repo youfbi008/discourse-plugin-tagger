@@ -1,8 +1,8 @@
 Discourse.TagsView = Discourse.View.extend({
     templateName: "topic_tags",
-    attributeBindings: ["model", 'new_tags'],
+    attributeBindings: ["model", 'new_tags', "editingTopic"],
 
-    new_tags: Em.computed.alias('controller.editingTopic'),
+    editingTopic: Em.computed.alias('controller.editingTopic'),
 
     insertTagsView: function() {
         var view = this;
@@ -18,7 +18,7 @@ Discourse.TagsView = Discourse.View.extend({
     },
     editingChanged: function(){
       this.rerender();
-    }.observes("new_tags")
+    }.observes("editingTopic")
 });
 
 Discourse.TopicController.reopen({
