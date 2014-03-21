@@ -58,10 +58,12 @@ h3 .tagger-tag,
     left: 40%;
 }
 
+.tagger-tags-view .fa,
 .tagger-tags .tagger-tag .fa {
 	cursor: pointer
 }
 
+.tagger-tags-view label,
 .tagger-tags label {
 	display: inline;
 }

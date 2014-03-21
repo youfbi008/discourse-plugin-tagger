@@ -1,8 +1,8 @@
 Discourse.TagsView = Discourse.View.extend({
     templateName: "topic_tags",
-    attributeBindings: ["model"],
+    attributeBindings: ["model", 'new_tags'],
 
-    model: Em.computed.alias('controller.model'),
+    new_tags: Em.computed.alias('controller.editingTopic'),
 
     insertTagsView: function() {
         var view = this;
@@ -15,15 +15,40 @@ Discourse.TagsView = Discourse.View.extend({
                 target.append(view.$());
             }
         });
-    }
+    },
+    editingChanged: function(){
+      this.rerender();
+    }.observes("new_tags")
 });
 
 Discourse.TopicController.reopen({
-  canSearch: Em.computed(function(){
-    // we have the search-plugin installed - yay
-    return Discourse.TopicSearchController !== undefined;
-  }).property()
-});
+  actions: {
+    removeTag: function(toRm){
+      this.get("new_tags").removeObject(toRm.toString());
+    }
+  },
+  editTags: function(){
+    if (!this.get("editingTopic")) var new_tags = null;
+    else new_tags = this.get("tags").copy();
+    this.set("new_tags", new_tags)
+  }.observes("editingTopic"),
+
+  saveTags: function(){
+    if (!this.get("topicSaving")) return;
+    // implicit is good enough for us here
+    var topic = this.get("model"),
+        tags = this.get("new_tags"); // we do total inline edit here
+    Discourse.ajax('/tagger/set_tags', {
+                        data: {
+                          tags: tags.join(","),
+                          topic_id: topic.get("id")
+                        }
+                      })
+        .then(function(tag_res) {
+          topic.get("tags").setObjects(tag_res.tags);
+        });
+  }.observes('topicSaving'),
+})
 
 Discourse.TopicView.reopen({
     insertTagsView: function() {
