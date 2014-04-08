@@ -20,8 +20,6 @@ Just two easy steps. From your main discourse do:
     rake db:migrate SCOPE=tagger                # run migrations
     rake assets:precompile                      # precompile assets
 
-Then restart your discourse and enjoy the fun on ever /user/*/activity-page.
-
 ## Changelog:
 
  * 2014-03-18
@@ -31,7 +29,6 @@ Then restart your discourse and enjoy the fun on ever /user/*/activity-page.
 
 (in order of importance)
 
- * there isn't any tag-search/overview page yet
 
 ### other Limitations:
 
