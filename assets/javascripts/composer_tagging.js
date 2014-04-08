@@ -82,12 +82,12 @@ Discourse.Composer.reopen({
 	}.property("creatingTopic", "editingPost", "editingFirstPost"),
 
 	createPost: function(opts) {
-		var dfr = this._super(opts),
-			tags = (this.get("tags") || []);
+		var tags = (this.get("tags") || []).join(",");
+        var dfr = this._super(opts);
 		dfr.then(function(post_result){
 				var tagger = Discourse.ajax('/tagger/set_tags', {
 		      							data: {
-	      									tags: tags.join(","),
+	      									tags: tags,
 	      									topic_id: post_result.post.topic_id
 	      								}
 	      							});
@@ -105,15 +105,15 @@ Discourse.Composer.reopen({
 	}.observes("post", "topic", "draftKey"),
 
 	editPost: function(opts) {
-		var dfr = this._super(opts),
-			post = this.get("post"),
-            tags = this.get("tags") || [];
+		var tags = (this.get("tags") || []).join(","),
+            dfr = this._super(opts),
+			post = this.get("post");
 		// this promise never terminates as of now. not that we care
 		if (post.get('post_number') === 1){
 			// we are topic post: update tags, too
 			var after_tags = Discourse.ajax('/tagger/set_tags', {
 		      							data: {
-	      									tags: tags.join(","),
+	      									tags: tags,
 	      									topic_id: post.get("topic_id")
 	      								}
 	      							});
