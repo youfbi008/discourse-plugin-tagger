@@ -8,6 +8,8 @@ A simple Plugin to allow users to attach labels (so called "tags") to their topi
 
 .To Note: this Plugins assumes tags are "moderated", meaning that only staff and users of the trust levels "leader" and "elder" are allowed to add new tags. Normal user can only pick from the list of pre-existing tags.
 
+.Attention: renders weird in mobile view with discourse <= 0.9.9 . Please upgrade to master.
+
 ## Installation
 
 Just two easy steps. From your main discourse do:

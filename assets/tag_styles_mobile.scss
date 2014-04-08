@@ -1,0 +1,38 @@
+
+/* topic view */
+.tagger-tags .tagger-tag,
+h3 .tagger-tag,
+.tagger-admin .tagger-tag,
+.tagger-tags-view a,
+.tagger-tags-view span {
+    display: inline-block;
+    padding: 1px 7px;
+    margin-top: 5px;
+    font-size: 0.8em;
+}
+
+.tagger-tags .tagger-tag,
+.tagger-admin .tagger-tag,
+h3 .tagger-tag,
+.tagger-tags-view a.tagger-tag,
+.tagger-tags-view span.tagger-tag {
+    background-color: #EDEDED;
+    color: #333;
+}
+
+.tagger-admin .tagger-tag {
+    font-size: 1.2em;
+    line-height: 2.8em;
+    cursor: pointer;
+}
+
+/* editor */
+.tagger-tags {
+    display: none;
+}
+
+/* Drop down menu with suggestions */
+.tt-dropdown-menu {
+    background-color: white;
+    padding: 3px 10px;
+}

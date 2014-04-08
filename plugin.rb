@@ -20,61 +20,9 @@ register_asset "javascripts/discourse/templates/tags_admin.js.handlebars"
 register_asset "javascripts/admin/tag_model.js", :admin
 register_asset "javascripts/admin/tagging_admin.js", :admin
 
-register_css <<CSS
-
-/* topic view */
-.tagger-tags .tagger-tag,
-h3 .tagger-tag,
-.tagger-admin .tagger-tag,
-.tagger-tags-view a,
-.tagger-tags-view span {
-	display: inline-block;
-	padding: 1px 7px;
-	margin-top: 5px;
-    font-size: 0.8em;
-}
-
-.tagger-tags .tagger-tag,
-.tagger-admin .tagger-tag,
-h3 .tagger-tag,
-.tagger-tags-view a.tagger-tag,
-.tagger-tags-view span.tagger-tag {
-	background-color: #EDEDED;
-	color: #333;
-}
-
-.tagger-admin .tagger-tag {
-	font-size: 1.2em;
-    line-height: 2.8em;
-    cursor: pointer;
-}
-
-/* editor */
-.tagger-tags {
-	line-height: 2em;
-    position: absolute;
-    top: 17px;
-    margin-top: 0px;
-    left: 40%;
-}
-
-.tagger-tags-view .fa,
-.tagger-tags .tagger-tag .fa {
-	cursor: pointer
-}
-
-.tagger-tags-view label,
-.tagger-tags label {
-	display: inline;
-}
-
-/* Drop down menu with suggestions */
-.tt-dropdown-menu {
-    background-color: white;
-    padding: 3px 10px;
-}
-
-CSS
+# UI
+register_asset "tag_styles.scss"
+register_asset "tag_styles_mobile.scss", :mobile
 
 after_initialize do
 	require_dependency File.expand_path('../integrate.rb', __FILE__)
