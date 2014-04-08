@@ -24,8 +24,12 @@ Just two easy steps. From your main discourse do:
 
 ## Changelog:
 
+ * 2014-04-08
+  - fix bug of missing tags after creating new topic
+  - show composer tags only in desktop view for now, refs #1
+
  * 2014-03-18
-   - first initial version launched
+  - first initial version launched
 
 ## TODO
 
