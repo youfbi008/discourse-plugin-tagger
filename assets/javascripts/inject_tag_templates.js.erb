@@ -1,8 +1,5 @@
 var patcher = Ember.TemplatePatcher;
 
-patcher.setDebug(true);
-patcher.setFinder("<div id='topic-title'>");
-
 patcher.addGeneralPatcher("061dd3942f735486fbc91b5c7dfcf7a6", function(ast, hash, str){
     var tag_edit_inject = <%= evaluate("./inject/tags_edit_view.html").to_json(); %>;
     var tag_inject = <%= evaluate("./inject/tags_view.html").to_json(); %>;
@@ -11,3 +8,9 @@ patcher.addGeneralPatcher("061dd3942f735486fbc91b5c7dfcf7a6", function(ast, hash
     Ember.TemplatePatcher.insertAt(ast,
             "if if if-else if[2]", tag_inject, {"shift": 1});
 });
+
+patcher.addGeneralPatcher("3fe4d7d24e07e91d38b67ffde45780f5",  function(ast, hash, str){
+    var tag_inject = <%= evaluate("./inject/composer_tagging.html").to_json(); %>;
+    Ember.TemplatePatcher.insertAt(ast, 0, tag_inject);
+});
+
