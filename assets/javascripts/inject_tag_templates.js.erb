@@ -1,0 +1,13 @@
+var patcher = Ember.TemplatePatcher;
+
+patcher.setDebug(true);
+patcher.setFinder("<div id='topic-title'>");
+
+patcher.addGeneralPatcher("061dd3942f735486fbc91b5c7dfcf7a6", function(ast, hash, str){
+    var tag_edit_inject = <%= evaluate("./inject/tags_edit_view.html").to_json(); %>;
+    var tag_inject = <%= evaluate("./inject/tags_view.html").to_json(); %>;
+    Ember.TemplatePatcher.insertAt(ast,
+            "if if if[1] [8]", tag_edit_inject);
+    Ember.TemplatePatcher.insertAt(ast,
+            "if if if-else if[2]", tag_inject, {"shift": 1});
+});

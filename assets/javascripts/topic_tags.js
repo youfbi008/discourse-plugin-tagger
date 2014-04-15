@@ -50,36 +50,6 @@ Discourse.TopicController.reopen({
   }.observes('topicSaving'),
 })
 
-Discourse.TopicView.reopen({
-    insertTagsView: function() {
-        if (this.get("tagsview")) return;
-
-        var view = this.createChildView(Discourse.TagsView,
-                        {controller: this.get("controller")});
-        view.insertTagsView();
-        this.set("tagsview", view)
-    }.on("didInsertElement"),
-
-    ensureTags: function(){
-        if (!this.get("tagsview")) return;
-        this.get("tagsview").insertTagsView();
-    }.observes('topic.tags', 'topic.loaded'),
-
-    removeTags: function(){
-        if (this.get("tagsview")){
-            this.get("tagsview").destroy();
-            this.set("tagsview", null);
-        }
-    }.on("willClearRender"),
-
-    killTags: function(){
-        if (this.get("tagsview")){
-            this.get("tagsview").destroy();
-            this.set("tagsview", null);
-        }
-    }.on("willDestroyElement")
-});
-
 // topics of tags views
 
 Discourse.TaggedTagRoute = Discourse.Route.extend({

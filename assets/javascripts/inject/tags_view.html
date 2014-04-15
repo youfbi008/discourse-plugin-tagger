@@ -1,0 +1,8 @@
+{{#if model.tags}}
+    <div class="tagger-tags-view">
+        <span>tagged:</span>
+      {{#each model.tags}}
+        <a href="/tag/{{unbound this}}" class="tagger-tag">{{this}}</a>
+      {{/each}}
+    </div>
+{{/if}}
