@@ -8,6 +8,9 @@ Tagger::Engine.routes.draw do
   get "/tags" => "tags#index"
   get "/tag/:tag" => "tags#get_topics_per_tag"
   get "/tags/cloud" => "tags#cloud"
+  get "/tags/cloud/topic/:topic_id" => "tags#cloud_for_topic"
+  get "/tags/cloud/category/:slug" => "tags#cloud_for_category"
+  get "/tags/cloud/tag/:tag" => "tags#cloud_for_tag"
   get "/set_tags" => "tags#set_tags"
 end
 

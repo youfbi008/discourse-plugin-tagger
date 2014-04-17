@@ -19,16 +19,41 @@ module Tagger
 
     def cloud
       discourse_expires_in 15.minutes
-      @highest = 0
+
       query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
                     .group("tagger_tags.id")
                     .joins(:topic)
-      tags = query.map do |item|
-            count = item.count_before_type_cast.to_i
-            @highest = count if count > @highest
-            { title: item.title, count: count}
-          end
-      render json: {max: @highest, cloud: tags}
+      render_cloud query
+    end
+
+    def cloud_for_category
+      params.require(:slug)
+      discourse_expires_in 15.minutes
+      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
+              .group("tagger_tags.id")
+              .joins(:topic)
+              .where("tagger_tags_topics.topic_id IN (SELECT topics.id FROM topics INNER JOIN categories ON topics.category_id = categories.id WHERE categories.slug = ?) ", params[:slug])
+      render_cloud query
+    end
+
+    def cloud_for_topic
+      params.require(:topic_id)
+      discourse_expires_in 15.minutes
+      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
+              .group("tagger_tags.id")
+              .joins(:topic)
+              .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics WHERE tagger_tags_topics.tag_id in (SELECT tagger_tags_topics.tag_id FROM tagger_tags_topics WHERE tagger_tags_topics.topic_id = ? )) ", params[:topic_id])
+      render_cloud query
+    end
+
+    def cloud_for_tag
+      params.require(:tag)
+      discourse_expires_in 15.minutes
+      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
+              .group("tagger_tags.id").
+              joins(:topic)
+              .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics INNER JOIN tagger_tags ON tagger_tags_topics.tag_id = tagger_tags.id WHERE tagger_tags.title = ?) ", params[:tag])
+      render_cloud query
     end
 
     def get_topics_per_tag
@@ -74,6 +99,16 @@ module Tagger
           render status: :forbidden, json: false
           return
         end
+      end
+
+      def render_cloud(query)
+        highest = 0
+        tags = query.map do |item|
+              count = item.count_before_type_cast.to_i
+              highest = count if count > highest
+              { title: item.title, count: count}
+            end
+        render json: {max: highest, cloud: tags}
       end
 
       def topics_query(options={})

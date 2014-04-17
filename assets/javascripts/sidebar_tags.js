@@ -23,19 +23,17 @@
                 router = Discourse.URL.get("router").router,
                 url = "/tagger/tags/cloud";
             if (name.indexOf("topic") === 0) { // one of the topic views
-                url = "/tagger/tags/cloud?topic_id=" + router.currentParams.id;
+                url = "/tagger/tags/cloud/topic/" + router.currentParams.id;
             } else if (name === "discovery.category"){
                 // inside a specific category we only want related to that cat
                 if (router.currentParams.slug){
-                    url = "/tagger/tags/cloud?category_slug=" + router.currentParams.slug;
+                    url = "/tagger/tags/cloud/category/" + router.currentParams.slug;
                 }
             } else if (name === "tagged.tag"){
                 // tag-page, load similar tags:
-                var tag_name = this.get("url").split("/")[1];
-                url = "/tagger/tags/cloud?tag=" + tag_name;
+                var tag_name = this.get("url").split("/")[2];
+                url = "/tagger/tags/cloud/tag/" + tag_name;
             }
-
-            console.log(url);
 
             if (url in this.__cache){
                 this.set("tags", this.__cache[url]);
