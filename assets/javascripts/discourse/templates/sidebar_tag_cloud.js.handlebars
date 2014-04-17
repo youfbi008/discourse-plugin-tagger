@@ -1,0 +1,5 @@
+<hr>
+<h2>Related Tags</h2>
+{{#each tag in view.tags}}
+<a href="/tag/{{unbound tag.title}}" class="tagger-tag cloud-{{unbound tag.count}}">{{tag.title}}</a>
+{{/each}}
