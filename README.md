@@ -1,5 +1,8 @@
 # Discourse Tagger Plugin
 
+EXPERIMENTAL !!!!
+
+**Attention**: this is an experimental brach of the Tagger-Plugin using the research-feature 'handlebars-injector' available on [this private branch for now](https://github.com/ligthyear/discourse/tree/handlebars-injector).
 
 A simple Plugin to allow users to attach labels (so called "tags") to their topics.
 
