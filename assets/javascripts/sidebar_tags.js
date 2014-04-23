@@ -1,57 +1,117 @@
-
 (function () {
     if (!Discourse.SidebarView) return;
     // this is the sidebar only feature
+    var TAGS_CACHE = {};
 
-    var SidebarTagCloudView = Discourse.View.extend({
+    var TagsMixin = Ember.Mixin.create({
+        classNameBindings: ["shouldBeHidden:hidden"],
         templateName: "sidebar_tag_cloud",
-        init: function () {
-            this._super();
-            this.__cache = {};
+        is_topic_page: function(){
+            return this.get("currentControllerName").indexOf("topic") === 0;
+        }.property("currentControllerName"),
+
+        is_category_page: function(){
+            return this.get("currentControllerName") === "discovery.category";
+        }.property("currentControllerName"),
+
+        is_tags_page: function(){
+            return this.get("currentControllerName") === "tagged.tag";
+        }.property("currentControllerName"),
+
+        load_tags: function(url) {
+            if (!url || url.length === 0){
+                // empty url: nothing to see here.
+                this.set("tags", []);
+                this.set("loading", false);
+                return;
+            }
+
+            if (url in TAGS_CACHE){
+                this.set("tags", TAGS_CACHE[url]);
+                this.set("loading", false);
+                return;
+            }
+
+            Discourse.ajax(url).then(function(resp){
+                TAGS_CACHE[url] = resp.cloud;
+                this.set("tags", resp.cloud);
+                this.set("loading", false);
+            }.bind(this));
+
         },
-        // refresh: function(){
-        //     if (this.get("tags")) return;
-        //     Discourse.ajax("/tagger/tags/cloud").then(function(resp){
-        //         console.log(resp);
-        //         this.set("tags", resp.cloud);
-        //     }.bind(this))
-        // }.on("didInsertElement"),
 
         urlChanged: function(){
+            if (this.get("shouldBeHidden")){
+                return;
+            }
             this.set("loading", true);
-            var name = this.get("currentControllerName"),
-                url = "/tagger/tags/cloud";
-            if (name.indexOf("topic") === 0) { // one of the topic views
-                url = "/tagger/tags/cloud/topic/" + router.currentParams.id;
-            } else if (name === "discovery.category"){
-                var controller = this.get("currentController");
-                // inside a specific category we only want related to that cat
-                if (!controller.params || !controller.params.slug){
-                    this.set("tags", []);
-                    this.set("loading", false);
-                    return;
-                }
-                url = "/tagger/tags/cloud/category/" + controller.params.slug;
-            } else if (name === "tagged.tag"){
-                // tag-page, load similar tags:
-                var tag_name = this.get("url").split("/")[2];
-                url = "/tagger/tags/cloud/tag/" + tag_name;
-            }
+            this.load_tags(this.get("tagsUrl"));
+        },
 
-            if (url in this.__cache){
-                this.set("tags", this.__cache[url]);
-                this.set("loading", false);
-            } else {
-                Discourse.ajax(url).then(function(resp){
-                    this.__cache[url] = resp.cloud;
-                    this.set("tags", resp.cloud);
-                    this.set("loading", false);
-                }.bind(this));
+        topicTagsUrl: function(){
+            return "/tagger/tags/cloud/topic/" + this.get("currentController").params.id;
+        }.property("currentController"),
+
+        tagsTagsUrl: function(){
+            return "/tagger/tags/cloud/tag/" + this.get("url").split("/")[2];
+        }.property("currentController"),
+
+        categoryTagsTagsUrl: function(){
+            var controller = this.get("currentController");
+                // inside a specific category we only want related to that cat
+            if (!controller.params || !controller.params.slug){
+                return;
             }
-        }
+            return "/tagger/tags/cloud/category/" + controller.params.slug;
+        }.property("currentController"),
+
+        shouldBeHidden: function(){
+            return !this.get("is_topic_page") &&
+                   !this.get("is_category_page") &&
+                   !this.get("is_tags_page");
+        }.property("is_topic_page", "is_tags_page", "is_category_page")
+    });
+
+    var SidebarAllTagsCloudView = Discourse.View.extend(TagsMixin, {
+        shouldBeHidden: false,
+        tagsUrl: "/tagger/tags/cloud"
+    });
+
+    var SidebarTopicRelatedTagsView = Discourse.View.extend(TagsMixin, {
+        shouldBeHidden: Ember.computed.not("is_topic_page"),
+        tagsUrl: Ember.computed.alias("topicTagsUrl")
+    });
+
+    var SidebarTagsRelatedTagsView = Discourse.View.extend(TagsMixin, {
+        shouldBeHidden: Ember.computed.not("is_tags_page"),
+        tagsUrl: Ember.computed.alias("tagsTagsUrl")
+    });
+
+    var SidebarCategoryRelatedTagsView = Discourse.View.extend(TagsMixin, {
+        shouldBeHidden: Ember.computed.not("is_category_page"),
+        tagsUrl: Ember.computed.alias("categoryTagsTagsUrl")
+    });
+
+    var SidebarCombinedTagsView = Discourse.View.extend(TagsMixin, {
+        shouldBeHidden: false,
+        tagsUrl: function(){
+            if (this.get("is_topic_page")){
+                return this.get("topicTagsUrl");
+            } else if (this.get("is_tags_page")) {
+                return this.get("tagsTagsUrl");
+            } else if (this.get("is_category_page")) {
+                return this.get("categoryTagsUrl");
+            } else {
+                return "/tagger/tags/cloud";
+            }
+        }.property("currentControllerName")
     });
 
     Discourse.SidebarView.reopen({
-        tagcloud: SidebarTagCloudView.create()
+        tagcloud: SidebarCombinedTagsView.create(),
+        populartags: SidebarAllTagsCloudView.create(),
+        topictags: SidebarTopicRelatedTagsView.create(),
+        tagstags: SidebarTagsRelatedTagsView.create(),
+        categorytags: SidebarCategoryRelatedTagsView.create()
     });
 })();
