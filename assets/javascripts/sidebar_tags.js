@@ -20,15 +20,18 @@
         urlChanged: function(){
             this.set("loading", true);
             var name = this.get("currentControllerName"),
-                router = Discourse.URL.get("router").router,
                 url = "/tagger/tags/cloud";
             if (name.indexOf("topic") === 0) { // one of the topic views
                 url = "/tagger/tags/cloud/topic/" + router.currentParams.id;
             } else if (name === "discovery.category"){
+                var controller = this.get("currentController");
                 // inside a specific category we only want related to that cat
-                if (router.currentParams.slug){
-                    url = "/tagger/tags/cloud/category/" + router.currentParams.slug;
+                if (!controller.params || !controller.params.slug){
+                    this.set("tags", []);
+                    this.set("loading", false);
+                    return;
                 }
+                url = "/tagger/tags/cloud/category/" + controller.params.slug;
             } else if (name === "tagged.tag"){
                 // tag-page, load similar tags:
                 var tag_name = this.get("url").split("/")[2];
