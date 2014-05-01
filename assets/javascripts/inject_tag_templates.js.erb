@@ -1,16 +1,25 @@
-var patcher = Ember.TemplatePatcher;
+var patcher = window.TemplatePatcher;
 
-patcher.addGeneralPatcher("061dd3942f735486fbc91b5c7dfcf7a6", function(ast, hash, str){
-    var tag_edit_inject = <%= evaluate("./inject/tags_edit_view.html").to_json(); %>;
-    var tag_inject = <%= evaluate("./inject/tags_view.html").to_json(); %>;
-    Ember.TemplatePatcher.insertAt(ast,
-            "if if if[1] [8]", tag_edit_inject);
-    Ember.TemplatePatcher.insertAt(ast,
-            "if if if-else if[2]", tag_inject, {"shift": 1});
-});
+// patch topic.js.handlebars
+patcher.addGeneralPatcher(["061dd3942f735486fbc91b5c7dfcf7a6",
+                           "b61f24d89806d16ef6e980c10a068434" //  at 0f62a6f132
+                           ],
+    function(ast, hash, str){
+        var tag_edit_inject = <%= evaluate("./inject/tags_edit_view.html").to_json(); %>;
+        var tag_inject = <%= evaluate("./inject/tags_view.html").to_json(); %>;
+        window.TemplatePatcher.insertAt(ast,
+                "if if if[1] [8]", tag_edit_inject);
+        window.TemplatePatcher.insertAt(ast,
+                "if if if-else if[2]", tag_inject, {"shift": 1});
+    });
 
-patcher.addGeneralPatcher("3fe4d7d24e07e91d38b67ffde45780f5",  function(ast, hash, str){
-    var tag_inject = <%= evaluate("./inject/composer_tagging.html").to_json(); %>;
-    Ember.TemplatePatcher.insertAt(ast, 0, tag_inject);
-});
+// patch composer.js.handlebars
+patcher.addGeneralPatcher([
+    "3fe4d7d24e07e91d38b67ffde45780f5",
+    "f5a96e884170ace97506d3e4ca3eb3d3" //  at 0f62a6f132
+    ],
+    function(ast, hash, str){
+        var tag_inject = <%= evaluate("./inject/composer_tagging.html").to_json(); %>;
+        window.TemplatePatcher.insertAt(ast, 0, tag_inject);
+    });
 
