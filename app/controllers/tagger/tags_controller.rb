@@ -37,12 +37,17 @@ module Tagger
     end
 
     def cloud_for_topic
-      params.require(:topic_id)
+      begin
+        params.require(:topic_id)
+        topic_id = Integer(params[:topic_id])
+      rescue ArgumentError
+        return render_error "Invalid Topic Id"
+      end
       discourse_expires_in 15.minutes
       query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
               .group("tagger_tags.id")
               .joins(:topic)
-              .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics WHERE tagger_tags_topics.tag_id in (SELECT tagger_tags_topics.tag_id FROM tagger_tags_topics WHERE tagger_tags_topics.topic_id = ? )) ", params[:topic_id])
+              .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics WHERE tagger_tags_topics.tag_id in (SELECT tagger_tags_topics.tag_id FROM tagger_tags_topics WHERE tagger_tags_topics.topic_id = ? )) ", topic_id)
       render_cloud query
     end
 
@@ -99,6 +104,10 @@ module Tagger
           render status: :forbidden, json: false
           return
         end
+      end
+
+      def render_error(message)
+        render status: :bad_request, json: {"error" => {"message" => message}}
       end
 
       def render_cloud(query)
