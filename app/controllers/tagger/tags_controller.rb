@@ -121,12 +121,10 @@ module Tagger
       end
 
       def topics_query(options={})
-       topics = Topic.where("deleted_at" => nil)
+       Topic.where("deleted_at" => nil)
                     .where("visible")
                     .where("archetype <> ?", Archetype.private_message)
                     .where("id in (SELECT topic_id FROM tagger_tags_topics WHERE tag_id = ?)", @tag.id)
-
-        return topics
       end
   end
 end
