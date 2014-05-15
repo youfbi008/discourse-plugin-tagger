@@ -3,12 +3,9 @@ if (!Discourse.AdminTemplatesAdminView) Discourse.AdminTemplatesAdminView = Disc
 
 Discourse.AdminTemplatesAdminView.reopen({
 	insertTagsitemView: function() {
-		$(".nav").append('<li><a href="/tagger/admin">Tags</a></li>')
-
+		$(".nav").append('<li><a href="/tagger/admin">Tags</a></li>');
 	}.on("didInsertElement")
 });
-
-
 
 Discourse.TaggerRoute = Discourse.AdminRoute.extend({
  // this is just an empty admin route so that we are shown under the menu, too
@@ -26,7 +23,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 			if (this.currentExpand) this.currentExpand.set("expanded", false);
 			new_model.set("expanded", true);
 			new_model.set("new_title", new_model.get("title"));
-			this.currentExpand = new_model
+			this.currentExpand = new_model;
 		},
 		cancelExpand: function(cur_model){
 			cur_model.set("expanded", false);
@@ -88,7 +85,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 		if (!filter) return this.get("arrangedContent");
 		var regexp = RegExp(".*" + filter + ".*");
 		return this.get("arrangedContent").filter(function(itm){
-			return itm.get("title").match(regexp) != null;
+			return itm.get("title").match(regexp) !== null;
 		});
 	}.property("arrangedContent", "tagname"),
 
@@ -97,8 +94,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 	},
 
 	isUnique: function(title) {
-		return this.get("model").find(function(itm){ itm == title }) === undefined;
-
+		return this.get("model").find(function(itm){ return itm == title; }) === undefined;
 	}
 });
 
@@ -109,8 +105,7 @@ Discourse.TaggerAdminRoute = Discourse.Route.extend({
 
 	renderTemplate: function() {
 		this.render("tags_admin");
-	},
-
+	}
 });
 
 Discourse.Route.buildRoutes(function() {
