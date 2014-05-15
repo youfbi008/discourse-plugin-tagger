@@ -21,8 +21,8 @@ register_asset "javascripts/admin/tag_model.js", :admin
 register_asset "javascripts/admin/tagging_admin.js", :admin
 
 # UI
-register_asset "tag_styles.scss"
-register_asset "tag_styles_mobile.scss", :mobile
+register_asset "stylesheets/tag_styles.scss"
+register_asset "stylesheets/tag_styles_mobile.scss", :mobile
 
 after_initialize do
 	require_dependency File.expand_path('../integrate.rb', __FILE__)

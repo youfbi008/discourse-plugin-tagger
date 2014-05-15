@@ -88,13 +88,13 @@ Discourse.TaggedTagRoute = Discourse.Route.extend({
     return Discourse.TopicList.find("tagger/tag/" + params.tag, {})
   },
    setupController: function(controller, model) {
-     this.controllerFor('discoveryTopics').setProperties({
+     this.controllerFor('discovery/topics').setProperties({
         "model": model,
         "tagname": this.get("tag")
       });
    },
   renderTemplate: function() {
-    var controller = this.controllerFor('discoveryTopics');
+    var controller = this.controllerFor('discovery/topics');
     this.render('tag_topic_list_head', { controller: controller, outlet: 'navigation-bar' });
     this.render('discovery/topics', { controller: controller, outlet: 'list-container'});
   }
