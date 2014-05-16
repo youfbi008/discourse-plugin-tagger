@@ -15,6 +15,9 @@ register_asset "javascripts/vendor/typeahead.bundle.js"
 register_asset "javascripts/composer_tagging.js"
 register_asset "javascripts/topic_tags.js"
 
+register_asset "javascripts/initializers/extend-discourse-classes.js.es6"
+register_asset "javascripts/components/tags-selector.js.es6"
+
 # admin UI
 register_asset "javascripts/discourse/templates/tags_admin.js.handlebars"
 register_asset "javascripts/admin/tag_model.js", :admin
