@@ -7,10 +7,18 @@ patcher.addGeneralPatcher(["061dd3942f735486fbc91b5c7dfcf7a6",
     function(ast, hash, str){
         var tag_edit_inject = <%= evaluate("./inject/tags_edit_view.html").to_json(); %>;
         var tag_inject = <%= evaluate("./inject/tags_view.html").to_json(); %>;
-        window.TemplatePatcher.insertAt(ast,
-                "if if if[1] [8]", tag_edit_inject);
-        window.TemplatePatcher.insertAt(ast,
-                "if if if-else if[2]", tag_inject, {"shift": 1});
+        try {
+            window.TemplatePatcher.insertAt(ast,
+                        "if if if[1] [8]", tag_edit_inject, {throw_exc: true});
+            window.TemplatePatcher.insertAt(ast,
+                        "if if if-else if[2]", tag_inject, {"shift": 1});
+        } catch (e) {
+            // adsense goes into our way
+            window.TemplatePatcher.insertAt(ast,
+                        "if[1] if if[1] [8]", tag_edit_inject, {throw_exc: true});
+            window.TemplatePatcher.insertAt(ast,
+                        "if[1] if if-else if[2]", tag_inject, {"shift": 1});
+        }
     });
 
 // patch composer.js.handlebars
