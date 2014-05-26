@@ -55,6 +55,7 @@ module Tagger
       params.require(:tag)
       discourse_expires_in 15.minutes
       query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
+              .where("tagger_tags.title != ?", params[:tag])
               .group("tagger_tags.id").
               joins(:topic)
               .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics INNER JOIN tagger_tags ON tagger_tags_topics.tag_id = tagger_tags.id WHERE tagger_tags.title = ?) ", params[:tag])
