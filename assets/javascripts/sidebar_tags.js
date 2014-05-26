@@ -36,6 +36,10 @@
                 TAGS_CACHE[url] = resp.cloud;
                 this.set("tags", resp.cloud);
                 this.set("loading", false);
+            }.bind(this)).catch(function(err){
+                this.set("tags", []);
+                this.set("loading", false);
+                console.error(err);
             }.bind(this));
 
         },
@@ -49,7 +53,7 @@
         },
 
         topicTagsUrl: function(){
-            return "/tagger/tags/cloud/topic/" + this.get("currentController").params.id;
+            return this.get("currentController").params.id ? "/tagger/tags/cloud/topic/" + this.get("currentController").params.id : null;
         }.property("currentController"),
 
         tagsTagsUrl: function(){
