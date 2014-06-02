@@ -22,26 +22,23 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 	sortAscending: true,
 
 	actions: {
-		expandTag: function(new_model){
-			if (this.currentExpand) this.currentExpand.set("expanded", false);
-			new_model.set("expanded", true);
-			new_model.set("new_title", new_model.get("title"));
-			this.currentExpand = new_model
+		expandTag: function(model){
+			model.set("new_title", model.get("title"));
+			model.set("new_info", model.get("info"));
+			this.set("editing", model);
 		},
 		cancelExpand: function(cur_model){
-			cur_model.set("expanded", false);
-			this.currentExpand = false;
+			this.set("editing", false);
 		},
 		deleteTag: function(cur_model){
 			if (!confirm("Are you sure you want to delete '" + cur_model.get("title") + "'?")) return;
+			this.set("editing", false)
 			cur_model.destroy().then(function(){
-				cur_model.set("expanded", false);
-				this.currentExpand = false;
 				this.removeObject(cur_model);
 			}.bind(this));
 		},
 		startMergeTag: function(cur_model){
-			this.currentExpand = false;
+			this.set("editing", false);
 			this.set("toMerge", cur_model);
 		},
 		cancelMergeTag: function(){
@@ -59,8 +56,9 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 			if (!this.checkTagValid(title)) return;
 
 			tag.set("title", title);
+			tag.set("info", tag.get("new_info"));
 			tag.set("loading", true);
-			this.currentExpand = false;
+			this.set("editing", false);
 			tag.save().then(function(){
 				tag.setProperties({
 					"loading": false,

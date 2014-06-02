@@ -7,6 +7,7 @@ Discourse.Tag = Discourse.Model.extend({
       type: this.get("newTag") ? "POST" : "PUT",
       data: {
         id: this.get("id"),
+        info: this.get("info"),
         title: this.get('title')
       }
     });

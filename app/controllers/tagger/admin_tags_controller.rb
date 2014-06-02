@@ -42,7 +42,7 @@ module Tagger
       end
 
       def tag_params()
-        params.permit(:title)
+        params.permit(:title, :info)
       end
   end
 end

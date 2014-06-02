@@ -51,6 +51,13 @@ module Tagger
       render_cloud query
     end
 
+    def topic_info
+      params.require(:tag)
+      tag = Tag.find_by("title = ?", params[:tag])
+      return render json: false unless tag
+      return render json: {title: tag.title, info: tag.info}
+    end
+
     def cloud_for_tag
       params.require(:tag)
       discourse_expires_in 15.minutes

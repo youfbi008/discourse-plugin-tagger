@@ -86,6 +86,26 @@
         tagsUrl: Ember.computed.alias("topicTagsUrl")
     });
 
+    var SidebarTagInfoView = Discourse.View.extend(TagsMixin, {
+        templateName: "sidebar_tag_info",
+        shouldBeHidden: Ember.computed.not("is_tags_page"),
+        urlChanged: function(){
+            if (this.get("shouldBeHidden")){
+                return;
+            }
+            this.set("loading", true);
+            var url = "/tagger/tags/info/" + this.get("url").split("/")[2]
+            Discourse.ajax(url).then(function(resp){
+                this.set("tag", resp);
+                this.set("loading", false);
+            }.bind(this)).catch(function(err){
+                this.set("tag", false);
+                this.set("loading", false);
+                console.error(err);
+            }.bind(this));
+        }
+    });
+
     var SidebarTagsRelatedTagsView = Discourse.View.extend(TagsMixin, {
         shouldBeHidden: Ember.computed.not("is_tags_page"),
         tagsUrl: Ember.computed.alias("tagsTagsUrl")
@@ -113,6 +133,7 @@
 
     Discourse.SidebarView.reopen({
         tagcloud: SidebarCombinedTagsView.create(),
+        taginfo: SidebarTagInfoView.create(),
         populartags: SidebarAllTagsCloudView.create(),
         topictags: SidebarTopicRelatedTagsView.create(),
         tagstags: SidebarTagsRelatedTagsView.create(),

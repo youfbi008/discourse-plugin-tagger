@@ -11,6 +11,7 @@ Tagger::Engine.routes.draw do
   get "/tags/cloud/topic/:topic_id" => "tags#cloud_for_topic"
   get "/tags/cloud/category/:slug" => "tags#cloud_for_category"
   get "/tags/cloud/tag/:tag" => "tags#cloud_for_tag"
+  get "/tags/info/:tag" => "tags#topic_info"
   get "/set_tags" => "tags#set_tags"
 end
 
