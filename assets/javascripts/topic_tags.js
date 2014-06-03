@@ -1,21 +1,8 @@
 Discourse.TagsView = Discourse.View.extend({
   templateName: "topic_tags",
   attributeBindings: ["model", 'new_tags', "editingTopic"],
-
   editingTopic: Em.computed.alias('controller.editingTopic'),
 
-  insertTagsView: function() {
-      var view = this;
-      if (view.state === "inDOM") return;
-
-      Ember.run.schedule('afterRender', this, function(){
-          var target = view._parentView.$("h1").parent();
-          if (target.length) {
-              if (view.state === "preRender") view.createElement();
-              target.append(view.$());
-          }
-      });
-  },
   editingChanged: function(){
     this.rerender();
   }.observes("editingTopic")
@@ -56,20 +43,6 @@ Discourse.TopicController.reopen({
 });
 
 Discourse.TopicView.reopen({
-  insertTagsView: function() {
-    if (this.get("tagsview")) return;
-
-    var view = this.createChildView(Discourse.TagsView,
-                    {controller: this.get("controller")});
-    view.insertTagsView();
-    this.set("tagsview", view);
-  }.on("didInsertElement"),
-
-  ensureTags: function(){
-    if (!this.get("tagsview")) return;
-    this.get("tagsview").insertTagsView();
-  }.observes('topic.tags', 'topic.loaded'),
-
   removeTags: function(){
     if (this.get("tagsview")){
         this.get("tagsview").destroy();

@@ -16,7 +16,7 @@ export default Ember.TextField.extend({
     var engine = new Bloodhound({
       remote: "/tagger/tags?search=%QUERY",
       datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.val); },
-    queryTokenizer: Bloodhound.tokenizers.whitespace
+      queryTokenizer: Bloodhound.tokenizers.whitespace
     });
 
     engine.initialize();

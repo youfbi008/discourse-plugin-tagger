@@ -1,14 +1,3 @@
-Discourse.ComposerTagsView = Discourse.View.extend({
-	templateName: "composer_tagging",
-	model: Em.computed.alias('controller.model'),
-
-	insertTagsView: function() {
-		this._insertElementLater(function() {
-			this._parentView.$().append(this.$());
-    }.bind(this));
-	}
-});
-
 Discourse.Composer.reopen({
 
 	// only creation of new topic and editing of first post are valid for us
@@ -59,16 +48,4 @@ Discourse.Composer.reopen({
 		}
 		return dfr;
 	}
-});
-
-Discourse.ComposerView.reopen({
-	insertTagsView: function() {
-		this._super();
-		if (this.get("tagsview")) return;
-
-		var view = this.createChildView(Discourse.ComposerTagsView,
-			 {controller: this.get("controller")});
-		view.insertTagsView();
-		this.set("tagsview", view);
-	}.on("didInsertElement")
 });

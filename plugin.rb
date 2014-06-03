@@ -7,16 +7,13 @@
 load File.expand_path('../lib/tagger/engine.rb', __FILE__)
 
 register_asset "javascripts/user_tag_patches.js"
-register_asset "javascripts/discourse/templates/composer_tagging.js.handlebars"
-register_asset "javascripts/discourse/templates/topic_tags.js.handlebars"
+register_asset "javascripts/discourse/templates/connectors/composer-open/add-tags.js.handlebars"
+register_asset "javascripts/discourse/templates/connectors/topic-title/tags.js.handlebars"
 register_asset "javascripts/discourse/templates/tag_topic_list_head.js.handlebars"
 register_asset "javascripts/discourse/templates/tag_cloud.js.handlebars"
 register_asset "javascripts/vendor/typeahead.bundle.js"
 register_asset "javascripts/composer_tagging.js"
 register_asset "javascripts/topic_tags.js"
-
-register_asset "javascripts/initializers/extend-discourse-classes.js.es6"
-register_asset "javascripts/components/tags-selector.js.es6"
 
 # admin UI
 register_asset "javascripts/discourse/templates/tags_admin.js.handlebars"
