@@ -40,6 +40,8 @@ Just two easy steps. From your main discourse do:
 
 (in order of importance)
 
+ - switch to newly shipped Select2js
+
 
 ### other Limitations:
 
