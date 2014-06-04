@@ -9,8 +9,8 @@ load File.expand_path('../lib/tagger/engine.rb', __FILE__)
 register_asset "javascripts/inject_tag_templates.js.erb", :template_injector
 
 register_asset "javascripts/user_tag_patches.js"
-# register_asset "javascripts/discourse/templates/composer_tagging.js.handlebars"
-# register_asset "javascripts/discourse/templates/topic_tags.js.handlebars"
+register_asset "javascripts/discourse/templates/connectors/composer-open/add-tags.js.handlebars"
+register_asset "javascripts/discourse/templates/connectors/topic-title/tags.js.handlebars"
 register_asset "javascripts/discourse/templates/tag_topic_list_head.js.handlebars"
 register_asset "javascripts/discourse/templates/sidebar_tag_cloud.js.handlebars"
 register_asset "javascripts/discourse/templates/sidebar_tag_info.js.handlebars"
@@ -26,8 +26,8 @@ register_asset "javascripts/admin/tag_model.js", :admin
 register_asset "javascripts/admin/tagging_admin.js", :admin
 
 # UI
-register_asset "tag_styles.scss"
-register_asset "tag_styles_mobile.scss", :mobile
+register_asset "stylesheets/tag_styles.scss"
+register_asset "stylesheets/tag_styles_mobile.scss", :mobile
 
 after_initialize do
 	require_dependency File.expand_path('../integrate.rb', __FILE__)

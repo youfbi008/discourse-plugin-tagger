@@ -1,72 +1,8 @@
-
-Discourse.TagsSelectorComponent = Ember.TextField.extend({
-	className: "tags-selector span4",
-
-    didInsertElement: function() {
-      	this._super();
-		this._start_typeahead();
-    },
-    keyUped: function(name, ev){
-    	if ([" ", ",", "."].indexOf(ev.key) > -1) {
-    		// separator keys make us commit
-    		if (Discourse.User.current().get("canAddNewTags")) this.addSelected(this.get("value"));
-    		ev.preventDefault();
-    	}
-    },
-    _start_typeahead: function(){
-      var _this = this;
-      var engine = new Bloodhound({
-      	remote: "/tagger/tags?search=%QUERY",
-      	datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.val); },
-  		queryTokenizer: Bloodhound.tokenizers.whitespace
-      });
-
-	  engine.initialize();
-      this.typeahead = this.$().typeahead({
-	        name: "typeahead",
-	        minLength: 3,
-	        limit: this.get("limit") || 5,
-	        customKeyed: this.keyUped.bind(this)
-   		},{
-   			displayKey: function(x){ return x; }, // no transformation needed
-			source: engine.ttAdapter()
-      });
-
-      this.typeahead.on("typeahead:selected", function(ev, item) {
-        _this.addSelected(item);
-      });
-
-      this.typeahead.on("typeahead:enterKeyed", function(ev){
-      	var val = _this.get("value");
-      	if (Discourse.User.current().get("canAddNewTags") && val.length > 2) _this.addSelected(val);
-      });
-
-      this.typeahead.on("typeahead:autocompleted", function(ev, item) {
-        _this.addSelected(item);
-      });
-    },
-
-    addSelected: function(new_tag){
-        if (!this.get("tags")) this.set("tags", [])
-		var tags =  this.get("tags"),
-    		new_tag = new_tag.toLowerCase();
-
-    	if (new_tag.length > 2 && tags.indexOf(new_tag) === -1 ){ // not found, add it
-    		tags.pushObject(new_tag);
-    		// this.set("tags", tags);
-	    }
-	    this.set("value", "");
-	    this.typeahead.val("");
-	    $(this.typeahead).typeahead("close");
-	}
-});
-
 Discourse.Composer.reopen({
 
 	// only creation of new topic and editing of first post are valid for us
 	can_be_tagged: function(){
-		return this.get("creatingTopic") || (
-			this.get("editingPost") && this.get("editingFirstPost"))
+		return this.get("creatingTopic") || (this.get("editingPost") && this.get("editingFirstPost"));
 	}.property("creatingTopic", "editingPost", "editingFirstPost"),
 
 	createPost: function(opts) {
@@ -79,7 +15,7 @@ Discourse.Composer.reopen({
 	      									topic_id: post_result.post.topic_id
 	      								}
 	      							});
-				tagger.then(function(tag_res){
+				tagger.then(function(){
 					return post_result;
 				});
 				return tagger;
@@ -94,8 +30,9 @@ Discourse.Composer.reopen({
 
 	editPost: function(opts) {
 		var tags = (this.get("tags") || []).join(","),
-            dfr = this._super(opts),
-			post = this.get("post");
+        dfr = this._super(opts),
+
+   	post = this.get("post");
 		// this promise never terminates as of now. not that we care
 		if (post.get('post_number') === 1){
 			// we are topic post: update tags, too
@@ -109,9 +46,8 @@ Discourse.Composer.reopen({
 				post.get("topic.tags").setObjects(tag_res.tags);
 			}.bind(this));
 		}
-		return dfr
+		return dfr;
 	}
-
 });
 
 require("discourse/controllers/composer")["default"].reopen({

@@ -1,4 +1,3 @@
-
 Discourse.Tag = Discourse.Model.extend({
   newTag: Em.computed.none('id'),
 
@@ -40,4 +39,4 @@ Discourse.Tag.reopenClass({
       });
     });
   }
-})
+});
