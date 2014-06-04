@@ -1,9 +1,5 @@
 # Discourse Tagger Plugin
 
-EXPERIMENTAL !!!!
-
-**Attention**: this is an experimental brach of the Tagger-Plugin using the research-feature 'handlebars-injector' available on [this private branch for now](https://github.com/ligthyear/discourse/tree/handlebars-injector).
-
 A simple Plugin to allow users to attach labels (so called "tags") to their topics.
 
 ## Details
@@ -11,7 +7,7 @@ A simple Plugin to allow users to attach labels (so called "tags") to their topi
 
 .To Note: this Plugins assumes tags are "moderated", meaning that only staff and users of the trust levels "leader" and "elder" are allowed to add new tags. Normal user can only pick from the list of pre-existing tags.
 
-.Attention: renders weird in mobile view with discourse <= 0.9.9 . Please upgrade to master.
+.Attention: This plugin requires discourse >= 0.9.9.7 . Please upgrade to master.
 
 ## Installation
 
@@ -26,6 +22,12 @@ Just two easy steps. From your main discourse do:
     rake assets:precompile                      # precompile assets
 
 ## Changelog:
+
+ * 2014-06-04
+  - merge @eviltrout's plugin-outlet fixes.
+  - add info to tags
+  - add views and urls for more tags
+  - add sidebar-cloud widgets
 
  * 2014-04-08
   - fix bug of missing tags after creating new topic
