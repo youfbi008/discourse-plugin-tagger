@@ -6,8 +6,6 @@
 # load the engine
 load File.expand_path('../lib/tagger/engine.rb', __FILE__)
 
-register_asset "javascripts/inject_tag_templates.js.erb", :template_injector
-
 register_asset "javascripts/user_tag_patches.js"
 register_asset "javascripts/discourse/templates/connectors/composer-open/add-tags.js.handlebars"
 register_asset "javascripts/discourse/templates/connectors/topic-title/tags.js.handlebars"
