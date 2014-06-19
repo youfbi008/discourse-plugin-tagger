@@ -119,6 +119,7 @@ module Tagger
       end
 
       def render_cloud(query)
+        query = query.limit(20)
         highest = 0
         tags = query.map do |item|
               count = item.count_before_type_cast.to_i
