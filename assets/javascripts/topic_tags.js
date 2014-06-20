@@ -57,7 +57,7 @@ Discourse.TopicController.reopen({
         .then(function(tag_res) {
           topic.get("tags").setObjects(tag_res.tags);
         });
-  }.observes('topicSaving'),
+  }.observes('topicSaving')
 });
 
 // topics of tags views

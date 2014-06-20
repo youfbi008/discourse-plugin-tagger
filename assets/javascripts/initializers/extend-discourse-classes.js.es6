@@ -9,7 +9,7 @@ export default {
         removeTag: function(toRm){
           this.get("content.tags").removeObject(toRm.toString());
         }
-      },
+      }
     });
   }
 };

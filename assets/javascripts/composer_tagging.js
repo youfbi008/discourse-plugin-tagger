@@ -55,5 +55,5 @@ require("discourse/controllers/composer")["default"].reopen({
 		removeTag: function(toRm){
 			this.get("content.tags").removeObject(toRm.toString());
 		}
-	},
+	}
 });

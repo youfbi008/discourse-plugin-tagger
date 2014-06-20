@@ -29,7 +29,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 		},
 		deleteTag: function(cur_model){
 			if (!confirm("Are you sure you want to delete '" + cur_model.get("title") + "'?")) return;
-			this.set("editing", false)
+			this.set("editing", false);
 			cur_model.destroy().then(function(){
 				this.removeObject(cur_model);
 			}.bind(this));
