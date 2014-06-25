@@ -93,7 +93,7 @@ var SidebarTagInfoView = Discourse.View.extend(TagsMixin, {
             return;
         }
         this.set("loading", true);
-        var url = "/tagger/tags/info/" + this.get("url").split("/")[2]
+        var url = "/tagger/tags/info/" + this.get("url").split("/")[2];
         Discourse.ajax(url).then(function(resp){
             this.set("tag", resp);
             this.set("loading", false);
