@@ -15,7 +15,6 @@ register_asset "javascripts/discourse/templates/sidebar_tag_info.js.handlebars"
 register_asset "javascripts/discourse/templates/tag_cloud.js.handlebars"
 register_asset "javascripts/vendor/typeahead.bundle.js"
 register_asset "javascripts/composer_tagging.js"
-register_asset "javascripts/sidebar_tags.js"
 register_asset "javascripts/topic_tags.js"
 
 # admin UI
