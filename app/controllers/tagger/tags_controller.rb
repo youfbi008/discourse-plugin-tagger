@@ -44,10 +44,9 @@ module Tagger
         return render_error "Invalid Topic Id"
       end
       discourse_expires_in 15.minutes
-      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
-              .group("tagger_tags.id")
-              .joins(:topic)
-              .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics WHERE tagger_tags_topics.tag_id in (SELECT tagger_tags_topics.tag_id FROM tagger_tags_topics WHERE tagger_tags_topics.topic_id = ? )) ", topic_id)
+
+      query = Tagger::Tag.cloud_for_topic(topic_id)
+
       render_cloud query
     end
 

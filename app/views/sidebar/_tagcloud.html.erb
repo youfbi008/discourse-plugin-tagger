@@ -1,0 +1,7 @@
+<%- if object.tags.present? %>
+  <hr>
+  <h2>Related Tags</h2>
+  <%- object.tags.each do |tag| %>
+    <%= link_to(tag.title, "tag/#{tag.title}", class: "tagger-tag cloud-#{tag.count}") %>
+  <%- end %>
+<%- end %>
