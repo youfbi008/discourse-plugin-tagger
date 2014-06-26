@@ -1,4 +1,4 @@
-
+/* global confirm */
 if (!Discourse.AdminTemplatesAdminView) Discourse.AdminTemplatesAdminView = Discourse.View.extend({});
 
 Discourse.AdminTemplatesAdminView.reopen({
@@ -42,7 +42,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 			this.set("toMerge", false);
 		},
 		confirmMergeTag: function(target){
-			source = this.get("toMerge");
+			var source = this.get("toMerge");
 			target.merge(source).then(function(){
 				this.removeObject(source);
 				this.set("toMerge", false);
@@ -81,7 +81,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 	filteredContent: function(){
 		var filter = this.get("tagname");
 		if (!filter) return this.get("arrangedContent");
-		var regexp = RegExp(".*" + filter + ".*");
+		var regexp = new RegExp(".*" + filter + ".*");
 		return this.get("arrangedContent").filter(function(itm){
 			return itm.get("title").match(regexp) !== null;
 		});
@@ -92,7 +92,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 	},
 
 	isUnique: function(title) {
-		return this.get("model").find(function(itm){ return itm == title; }) === undefined;
+		return this.get("model").find(function(itm){ return itm === title; }) === undefined;
 	}
 });
 
