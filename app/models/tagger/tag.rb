@@ -40,5 +40,19 @@ module Tagger
       $redis.setex("tag_cloud_to_category_#{slug}", 15.minutes, Marshal.dump(tags))
     end
 
+    def self.cloud_for_tag(tag)
+      tags = $redis.get("tag_cloud_to_tag_#{tag}")
+
+      return Marshal.load(tags) unless tags.nil?      
+
+      tags = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
+              .where("tagger_tags.title != ?", tag)
+              .group("tagger_tags.id").
+              joins(:topic)
+              .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics INNER JOIN tagger_tags ON tagger_tags_topics.tag_id = tagger_tags.id WHERE tagger_tags.title = ?) ", tag)
+
+      $redis.setex("tag_cloud_to_tag_#{tag}", 15.minutes, Marshal.dump(tags))
+    end
+
   end
 end

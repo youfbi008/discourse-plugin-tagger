@@ -57,11 +57,7 @@ module Tagger
     def cloud_for_tag
       params.require(:tag)
       discourse_expires_in 15.minutes
-      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
-              .where("tagger_tags.title != ?", params[:tag])
-              .group("tagger_tags.id").
-              joins(:topic)
-              .where("tagger_tags_topics.topic_id IN (SELECT tagger_tags_topics.topic_id FROM tagger_tags_topics INNER JOIN tagger_tags ON tagger_tags_topics.tag_id = tagger_tags.id WHERE tagger_tags.title = ?) ", params[:tag])
+      query = Tagger::Tag.cloud_for_tag(params[:tag])
       render_cloud query
     end
 
@@ -130,7 +126,14 @@ module Tagger
               highest = count if count > highest
               { title: item.title, count: count}
             end
-        render json: {max: highest, cloud: tags}
+        respond_to do |format|
+          format.html do
+            render inline: "<h2>hello tagworld!</h2>"
+          end
+          format.json do
+            render json: {max: highest, cloud: tags}
+          end
+        end
       end
 
       def topics_query(options={})
