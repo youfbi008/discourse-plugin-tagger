@@ -4,6 +4,8 @@ module Tagger
 
     before_action :check_user, only: [:set_tags]
 
+    skip_before_filter :check_xhr
+
     # GET /tags
     def index
       @tags = Tag.all
@@ -20,19 +22,14 @@ module Tagger
     def cloud
       discourse_expires_in 15.minutes
 
-      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
-                    .group("tagger_tags.id")
-                    .joins(:topic)
+      query = Tagger::Tag.default_cloud
       render_cloud query
     end
 
     def cloud_for_category
-      params.require(:slug)
+      slug = params.require(:slug)
       discourse_expires_in 15.minutes
-      query = Tagger::Tag.select("tagger_tags.title, COUNT(tagger_tags_topics.topic_id) as count")
-              .group("tagger_tags.id")
-              .joins(:topic)
-              .where("tagger_tags_topics.topic_id IN (SELECT topics.id FROM topics INNER JOIN categories ON topics.category_id = categories.id WHERE categories.slug = ?) ", params[:slug])
+      query = Tagger::Tag.cloud_for_category(slug)
       render_cloud query
     end
 
@@ -74,7 +71,15 @@ module Tagger
       return render json: false if @tag.blank?
 
       list = TopicList.new(:tag, current_user, topics_query)
-      render_serialized(list, TopicListSerializer)
+      respond_to do |format|
+        format.html do
+          @list = list
+          render "sidebar/topicslist"
+        end
+        format.json do
+          render_serialized(list, TopicListSerializer)
+        end
+      end
     end
 
     def set_tags
