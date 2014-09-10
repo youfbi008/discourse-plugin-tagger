@@ -4,7 +4,7 @@ import Widgets from "discourse/plugins/tagger/discourse/sidebar_tags";
 export default {
   name: "extend-discourse-classes",
 
-  initialize: function() {
+  initialize: function(container, application) {
     ComposerController.reopen({
       actions: {
         removeTag: function(toRm){
@@ -13,8 +13,10 @@ export default {
       }
     });
 
-    if (Discourse.SidebarView) {
-        Discourse.SidebarView.reopen(Widgets);
+    var sideBarView = container.lookupFactory('view:sidebar');
+
+    if (sideBarView) {
+        sideBarView.reopen(Widgets);
     }
 
   }

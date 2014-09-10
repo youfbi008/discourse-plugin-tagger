@@ -131,10 +131,10 @@ var SidebarCombinedTagsView = Discourse.View.extend(TagsMixin, {
 });
 
 export default {
-    tagcloud: SidebarCombinedTagsView.create(),
-    taginfo: SidebarTagInfoView.create(),
-    populartags: SidebarAllTagsCloudView.create(),
-    topictags: SidebarTopicRelatedTagsView.create(),
-    tagstags: SidebarTagsRelatedTagsView.create(),
-    categorytags: SidebarCategoryRelatedTagsView.create()
+    tagcloud: SidebarCombinedTagsView,
+    taginfo: SidebarTagInfoView,
+    populartags: SidebarAllTagsCloudView,
+    topictags: SidebarTopicRelatedTagsView,
+    tagstags: SidebarTagsRelatedTagsView,
+    categorytags: SidebarCategoryRelatedTagsView
 };
