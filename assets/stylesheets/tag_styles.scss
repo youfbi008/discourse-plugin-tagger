@@ -2,6 +2,8 @@
 .tagger-tags .tagger-tag,
 h3 .tagger-tag,
 .tagger-admin .tagger-tag,
+.tagger-tags-pre-menu-view a,
+.tagger-tags-pre-menu-view span,
 .tagger-tags-view a,
 .tagger-tags-view span {
     display: inline-block;
@@ -13,6 +15,8 @@ h3 .tagger-tag,
 .tagger-tags .tagger-tag,
 .tagger-admin .tagger-tag,
 h3 .tagger-tag,
+.tagger-tags-pre-menu-view a,
+.tagger-tags-pre-menu-view span,
 .tagger-tags-view a.tagger-tag,
 .tagger-tags-view span.tagger-tag {
     background-color: #EDEDED;
@@ -34,6 +38,8 @@ h3 .tagger-tag,
     left: 40%;
 }
 
+
+.tagger-tags-pre-menu-view .fa,
 .tagger-tags-view .fa,
 .tagger-tags .tagger-tag .fa {
     cursor: pointer
