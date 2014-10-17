@@ -46,6 +46,8 @@ hooks:
       - rake db:migrate SCOPE=tagger
 ```
 
+And make sure to rebuild your app via `./launcher rebuild my_image`
+
 ## Changelog:
 
  * 2014-06-04
