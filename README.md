@@ -21,6 +21,31 @@ Just two easy steps. From your main discourse do:
     rake db:migrate SCOPE=tagger                # run migrations
     rake assets:precompile                      # precompile assets
 
+### In Docker
+
+To Install in Docker, add the  the following lines to your app.yaml in the after_code-hook
+
+```
+
+## The docker manager plugin allows you to one-click upgrade Discouse
+## http://discourse.example.com/admin/docker
+hooks:
+  after_code:
+  - exec:
+    cd: $home/plugins
+    cmd:
+     - mkdir -p plugins
+     - git clone https://github.com/discourse/docker_manager.git
+# Added Tagger plugin:
+     - git clone https://github.com/werweisswas/discourse-plugin-tagger.git
+# Make sure tagger gets installed
+  - exec:
+    cd: $home
+    cmd:
+      - rake tagger:install:migrations
+      - rake db:migrate SCOPE=tagger
+```
+
 ## Changelog:
 
  * 2014-06-04
