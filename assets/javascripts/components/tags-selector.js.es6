@@ -2,6 +2,9 @@
 
 export default Ember.TextField.extend({
 	className: "tags-selector span4",
+  attributeBindings: ['placeholder'],
+
+  placeholder: 'Tags',
 
   keyUped: function(name, ev){
     if ([" ", ",", "."].indexOf(ev.key) > -1) {
