@@ -13,11 +13,12 @@ export default {
       }
     });
 
-    var sideBarView = container.lookupFactory('view:sidebar');
-
-    if (sideBarView) {
-        sideBarView.reopen(Widgets);
+    if (!Discourse['external:SidebarWidgets']){
+        Discourse['external:SidebarWidgets'] = {};
     }
 
+    for (var key in Widgets){
+      Discourse['external:SidebarWidgets'][key] = Widgets[key];
+    }
   }
 };
