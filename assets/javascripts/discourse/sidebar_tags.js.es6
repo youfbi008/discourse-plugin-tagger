@@ -5,6 +5,7 @@ var TAGS_CACHE = {};
 var TagsMixin = Ember.Mixin.create({
     classNameBindings: ["shouldBeHidden:hidden"],
     templateName: "sidebar_tag_cloud",
+    currentControllerName: "",
     is_topic_page: function(){
         return this.get("currentControllerName").indexOf("topic") === 0;
     }.property("currentControllerName"),
