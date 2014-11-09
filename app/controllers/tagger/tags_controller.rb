@@ -89,7 +89,7 @@ module Tagger
 
       tag_names = params[:tags].split(",")
       tags = Tag.all().where("title in (:tag_names)", tag_names: tag_names)
-      if tags.length != tag_names and current_user.has_trust_level?(:leader)
+      if tags.length != tag_names and current_user.has_trust_level?(trust_level)
         # more tags given than currently found
         # and the user is trusted to create tags
         existing_tags = tags.map {|tag| tag.title}
@@ -108,6 +108,13 @@ module Tagger
     end
 
     private
+      def trust_level
+        if TrustLevel.valid_level?(:leader)
+         :leader
+         else
+          3
+        end
+      end
       # Use callbacks to share common setup or constraints between actions.
       def check_user
         if current_user.nil?
