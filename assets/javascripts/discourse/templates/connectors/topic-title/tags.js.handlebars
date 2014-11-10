@@ -1,11 +1,5 @@
 {{#if editingTopic}}
     <div class="tagger-tags-view edit">
-        <label>Tags:</label>
-        {{#if new_tags}}
-            {{#each new_tags}}
-                <span class="tagger-tag" >{{this}} <i {{action removeTag this }} class='fa fa-times'></i></span>
-            {{/each}}
-        {{/if}}
         {{tags-selector tags=new_tags}}
     </div>
 {{else}}

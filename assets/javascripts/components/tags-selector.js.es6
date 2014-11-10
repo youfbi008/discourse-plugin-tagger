@@ -1,21 +1,12 @@
 /*global Bloodhound */
 
-export default Ember.TextField.extend({
-	className: "tags-selector span4",
+export default Ember.View.extend({
+	// className: "tags-selector span4",
   attributeBindings: ['placeholder'],
-
+  template: Ember.Handlebars.compile('<input type="text" value="{{unbound tags}}">'),
   placeholder: 'Tags',
 
-  keyUped: function(name, ev){
-    if ([" ", ",", "."].indexOf(ev.key) > -1) {
-      // separator keys make us commit
-      if (Discourse.User.current().get("canAddNewTags")) this.addSelected(this.get("value"));
-      ev.preventDefault();
-    }
-  },
-
   _startTypeahead: function(){
-    var _this = this;
     var engine = new Bloodhound({
       remote: "/tagger/tags?search=%QUERY",
       datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.val); },
@@ -23,41 +14,28 @@ export default Ember.TextField.extend({
     });
 
     engine.initialize();
-    this.typeahead = this.$().typeahead({
+    this.$('input').tagsinput({
+      typeaheadjs: {
         name: "typeahead",
         minLength: 3,
         limit: this.get("limit") || 5,
-        customKeyed: this.keyUped.bind(this)
-    },{
-      displayKey: function(x){ return x; }, // no transformation needed
-      source: engine.ttAdapter()
+        displayKey: function(x){ return x; }, // no transformation needed
+        source: engine.ttAdapter()
+      },
+      trimValue: true,
+      tagClass: 'tagger-tag',
+      maxTags: this.get("limit") || 5,
+      freeInput: Discourse.User.current().get("canAddNewTags")
     });
 
-    this.typeahead.on("typeahead:selected", function(ev, item) {
-      _this.addSelected(item);
-    });
+    this.$('input').on('itemAdded', function(evt){
+      this.get("tags").pushObject(evt.item);
+    }.bind(this));
 
-    this.typeahead.on("typeahead:enterKeyed", function(){
-      var val = _this.get("value");
-      if (Discourse.User.current().get("canAddNewTags") && val.length > 2) _this.addSelected(val);
-    });
+    this.$('input').on('itemRemoved', function(evt){
+      this.get("tags").removeObject(evt.item);
+    }.bind(this));
 
-    this.typeahead.on("typeahead:autocompleted", function(ev, item) {
-      _this.addSelected(item);
-    });
   }.on('didInsertElement'),
-
-  addSelected: function(newTag) {
-    if (!this.get("tags")) { this.set("tags", []); }
-    var tags =  this.get("tags");
-    newTag = newTag.toLowerCase();
-
-    if (newTag.length > 2 && tags.indexOf(newTag) === -1 ){ // not found, add it
-      tags.pushObject(newTag);
-    }
-    this.set("value", "");
-    this.typeahead.val("");
-    $(this.typeahead).typeahead("close");
-  }
 });
 

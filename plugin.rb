@@ -15,6 +15,7 @@ register_asset "javascripts/discourse/templates/sidebar_tag_cloud.js.handlebars"
 register_asset "javascripts/discourse/templates/sidebar_tag_info.js.handlebars"
 register_asset "javascripts/discourse/templates/tag_cloud.js.handlebars"
 register_asset "javascripts/vendor/typeahead.bundle.js"
+register_asset "javascripts/vendor/bootstrap-tagsinput.js"
 register_asset "javascripts/composer_tagging.js"
 register_asset "javascripts/topic_tags.js"
 
@@ -24,6 +25,7 @@ register_asset "javascripts/admin/tag_model.js", :admin
 register_asset "javascripts/admin/tagging_admin.js", :admin
 
 # UI
+register_asset "stylesheets/bootstrap-tagsinput.css"
 register_asset "stylesheets/tag_styles.scss"
 register_asset "stylesheets/tag_styles_mobile.scss", :mobile
 
