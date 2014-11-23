@@ -1,18 +1,5 @@
 /* topic view */
 .tagger-tags .tagger-tag,
-h3 .tagger-tag,
-.tagger-admin .tagger-tag,
-.tagger-tags-pre-menu-view a,
-.tagger-tags-pre-menu-view span,
-.tagger-tags-view a,
-.tagger-tags-view span {
-    display: inline-block;
-    padding: 1px 7px;
-    margin-top: 5px;
-    font-size: 0.8em;
-}
-
-.tagger-tags .tagger-tag,
 .tagger-admin .tagger-tag,
 h3 .tagger-tag,
 .tagger-tags-pre-menu-view a,
@@ -23,12 +10,6 @@ h3 .tagger-tag,
     color: #333;
 }
 
-.tagger-admin .tagger-tag {
-    font-size: 1.2em;
-    line-height: 2.8em;
-    cursor: pointer;
-}
-
 /* editor */
 .tagger-tags {
     line-height: 2em;
@@ -36,22 +17,4 @@ h3 .tagger-tag,
     top: 17px;
     margin-top: 0px;
     left: 40%;
-}
-
-
-.tagger-tags-pre-menu-view .fa,
-.tagger-tags-view .fa,
-.tagger-tags .tagger-tag .fa {
-    cursor: pointer
-}
-
-.tagger-tags-view label,
-.tagger-tags label {
-    display: inline;
-}
-
-/* Drop down menu with suggestions */
-.tt-dropdown-menu {
-    background-color: white;
-    padding: 3px 10px;
 }
