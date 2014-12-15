@@ -3,7 +3,9 @@ if (!Discourse.AdminTemplatesAdminView) Discourse.AdminTemplatesAdminView = Disc
 
 Discourse.AdminTemplatesAdminView.reopen({
 	insertTagsitemView: function() {
-		$(".nav").append('<li><a href="/tagger/admin">Tags</a></li>');
+		if(Discourse.User.currentProp('admin')) {
+      $(".nav").append('<li><a href="/tagger/admin">Tags</a></li>');
+    }
 	}.on("didInsertElement")
 });
 
