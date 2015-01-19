@@ -1,4 +1,4 @@
-<h2>{{i18n related_tags.title}}</h2>
+<h2>{{i18n 'related_tags.title'}}</h2>
 <hr>
 {{#if view.loading}}
     <i class="fa fa-spin fa-spinner"></i>
@@ -6,6 +6,6 @@
     {{#each tag in view.tags}}
         <a href="/tag/{{unbound tag.title}}" class="tagger-tag cloud-{{unbound tag.count}}">{{tag.title}}</a>
     {{else}}
-        <span class="non-found">{{i18n related_tags.not_found}}</span>
+        <span class="non-found">{{i18n 'related_tags.not_found'}}</span>
     {{/each}}
 {{/if}}
