@@ -4,7 +4,7 @@ export default Ember.View.extend({
 	// className: "tags-selector span4",
   template: Ember.Handlebars.compile('<input type="text" placeholder="{{i18n \'tagger.placeholder\'}}" value="{{unbound view.tags}}">'),
 
-  tagsChanged: function() {
+  updatePlaceholder: function() {
     var tagsinput = this.$('> input').tagsinput('input');
 
     if (this.get('tags.length') > 0) {
@@ -36,7 +36,7 @@ export default Ember.View.extend({
       freeInput: Discourse.User.current().get("canAddNewTags")
     });
 
-    this.tagsChanged();
+    this.updatePlaceholder();
 
     this.$('input').on('itemAdded', function(evt){
       this.get("tags").pushObject(evt.item);
