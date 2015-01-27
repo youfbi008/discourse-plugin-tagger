@@ -3,7 +3,7 @@
 export default Ember.View.extend({
 	// className: "tags-selector span4",
   attributeBindings: ['placeholder'],
-  template: Ember.Handlebars.compile('<input type="text" value="{{unbound tags}}">'),
+  template: Ember.Handlebars.compile('<input type="text" value="{{unbound view.tags}}">'),
   placeholder: 'Tags',
 
   _startTypeahead: function(){
