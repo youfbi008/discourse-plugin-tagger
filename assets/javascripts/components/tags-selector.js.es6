@@ -2,9 +2,17 @@
 
 export default Ember.View.extend({
 	// className: "tags-selector span4",
-  attributeBindings: ['placeholder'],
-  template: Ember.Handlebars.compile('<input type="text" value="{{unbound view.tags}}">'),
-  placeholder: 'Tags',
+  template: Ember.Handlebars.compile('<input type="text" placeholder="{{i18n \'tagger.placeholder\'}}" value="{{unbound view.tags}}">'),
+
+  tagsChanged: function() {
+    var tagsinput = this.$('> input').tagsinput('input');
+
+    if (this.get('tags.length') > 0) {
+      tagsinput.removeAttr('placeholder');
+    } else {
+      tagsinput.attr('placeholder', I18n.t('tagger.placeholder'));
+    }
+  }.observes('tags.@each'),
 
   _startTypeahead: function(){
     var engine = new Bloodhound({
@@ -27,6 +35,8 @@ export default Ember.View.extend({
       maxTags: this.get("limit") || 5,
       freeInput: Discourse.User.current().get("canAddNewTags")
     });
+
+    this.tagsChanged();
 
     this.$('input').on('itemAdded', function(evt){
       this.get("tags").pushObject(evt.item);
