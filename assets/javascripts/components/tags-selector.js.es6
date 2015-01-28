@@ -2,6 +2,7 @@
 
 export default Ember.View.extend({
 	// className: "tags-selector span4",
+  classNameBindings: ['hasFocus:has-focus'],
   template: Ember.Handlebars.compile('<input type="text" placeholder="{{i18n \'tagger.placeholder\'}}" value="{{unbound view.tags}}">'),
 
   updatePlaceholder: function() {
@@ -37,6 +38,12 @@ export default Ember.View.extend({
     });
 
     this.updatePlaceholder();
+
+    this.$('> input').tagsinput('input').focusin(function() {
+      this.set('hasFocus', true);
+    }.bind(this)).focusout(function() {
+      this.set('hasFocus', false);
+    }.bind(this));
 
     this.$('input').on('itemAdded', function(evt){
       this.get("tags").pushObject(evt.item);
