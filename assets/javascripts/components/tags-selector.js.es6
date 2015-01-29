@@ -19,7 +19,8 @@ export default Ember.View.extend({
     var engine = new Bloodhound({
       remote: "/tagger/tags?search=%QUERY",
       datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.val); },
-      queryTokenizer: Bloodhound.tokenizers.whitespace
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      limit: this.get("limit") || 5
     });
 
     engine.initialize();
@@ -27,7 +28,6 @@ export default Ember.View.extend({
       typeaheadjs: {
         name: "typeahead",
         minLength: 3,
-        limit: this.get("limit") || 5,
         displayKey: function(x){ return x; }, // no transformation needed
         source: engine.ttAdapter()
       },
