@@ -48,6 +48,7 @@ Discourse.TaggerAdminController = Ember.ArrayController.extend({
 			target.merge(source).then(function(){
 				this.removeObject(source);
 				this.set("toMerge", false);
+				bootbox.alert(source.title + " successfully merge into " + target.title);
 			}.bind(this));
 		},
 		saveTag: function(tag){
