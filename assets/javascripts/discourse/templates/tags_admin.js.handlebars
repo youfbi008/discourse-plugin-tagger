@@ -1,10 +1,10 @@
 <div class='admin-controls'>
   <div class="pull-right">
-    {{textField value=newTagName action="newTag" placeholder="new tag"}}
-    <button {{action newTag}} class='btn btn-primary pull-right'>create Tag</button>
+    {{text-field value=newTagName action="newTag" placeholder="new tag"}}
+    <button {{action 'newTag'}} class='btn btn-primary pull-right'>create Tag</button>
   </div>
   <div class='span6 tagname controls'>
-    {{textField value=tagname placeholder="filter tags"}}
+    {{text-field value=tagname placeholder="filter tags"}}
   </div>
 </div>
 
@@ -12,12 +12,12 @@
   {{#if editing}}
 
     <div class="tagger-admin alert-info">
-        {{textField className="span3" value=editing.new_title}}
-        <button class='btn btn-small' {{action startMergeTag editing}}><i class='fa fa-code-fork'></i>merge</button>
-        <button class='btn btn-small cancel' {{action deleteTag editing}}><i class='fa fa-trash-o'></i>delete</button> <br>
+        {{text-field className="span3" value=editing.new_title}}
+        <button class='btn btn-small' {{action 'startMergeTag' editing}}><i class='fa fa-code-fork'></i>merge</button>
+        <button class='btn btn-small cancel' {{action 'deleteTag' editing}}><i class='fa fa-trash-o'></i>delete</button> <br>
         {{textarea placeholder="tag info" value=editing.new_info}}<br>
-        <button class='btn btn-small ok no-text' {{action saveTag editing}}><i class='fa fa-check'></i></button>
-        <button class='btn btn-small no-text' {{action cancelExpand editing}}><i class='fa fa-times'></i></button>
+        <button class='btn btn-small ok no-text' {{action 'saveTag' editing}}><i class='fa fa-check'></i></button>
+        <button class='btn btn-small no-text' {{action 'cancelExpand' editing}}><i class='fa fa-times'></i></button>
     </div>
 
   {{/if}}
@@ -26,16 +26,16 @@
     <div class="tagger-admin alert-info">
       <div class="alert alert-error">
         <h3>Merging</h3>
-        <p>Please select the Tag you want <strong>'{{toMerge.title}}'</strong> to be merged into or <button {{action cancelMergeTag}} class='btn btn-primary'>cancel merging</button></p>
+        <p>Please select the Tag you want <strong>'{{toMerge.title}}'</strong> to be merged into or <button {{action 'cancelMergeTag'}} class='btn btn-primary'>cancel merging</button></p>
       </div>
       {{#each filteredContent}}
-        <span {{action confirmMergeTag this}} class="tagger-tag">{{this.title}}</span>
+        <span {{action 'confirmMergeTag' this}} class="tagger-tag">{{this.title}}</span>
       {{/each}}
     </div>
   {{else}}
     <div class="tagger-admin">
       {{#each filteredContent}}
-        <span {{action expandTag this}} class="tagger-tag">{{this.title}}</span>
+        <span {{action 'expandTag' this}} class="tagger-tag">{{this.title}}</span>
       {{/each}}
     </div>
   {{/if}}
