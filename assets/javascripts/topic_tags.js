@@ -91,7 +91,8 @@ Discourse.TaggedCloudRoute = Discourse.Route.extend({
 });
 
 Discourse.TaggedView = Discourse.View.extend({
-  templateName: "discovery"
+  templateName: "discovery",
+  classNames: ['tag-topic-list']
 });
 
 Discourse.Route.buildRoutes(function() {
