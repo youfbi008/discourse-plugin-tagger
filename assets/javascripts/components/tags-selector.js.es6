@@ -33,7 +33,7 @@ export default Ember.View.extend({
       },
       trimValue: true,
       tagClass: 'tagger-tag',
-      maxTags: this.get("limit") || 5,
+      maxTags: this.get("maxTags") || 5,
       freeInput: Discourse.User.current().get("canAddNewTags")
     });
 
