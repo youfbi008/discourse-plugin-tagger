@@ -1,27 +1,54 @@
 # Discourse Tagger Plugin
 
-A simple Plugin to allow users to attach labels (so called "tags") to their topics.
+A plugin to allow users to attach labels (so called "tags") to their topics.
 
 ## Details
 
 
 .To Note: this Plugins assumes tags are "moderated", meaning that only staff and users of the trust levels "leader" and "elder" are allowed to add new tags. Normal user can only pick from the list of pre-existing tags.
 
-.Attention: This plugin requires discourse >= 0.9.9.7 . Please upgrade to master.
-
 ## Installation
+
+### the official Docker
+
+
+To install in docker, add the following to your app.yml in the plugins section:
+
+```
+hooks:
+  after_code:
+    - exec:
+        cd: $home/plugins
+        cmd:
+          - git clone https://github.com/discourse/docker_manager.git
+          - git clone https://github.com/werweisswas/discourse-plugin-tagger.git tagger
+          - cp tagger/db/migrate/* db/migrate/
+```
+
+and rebuild docker via
+
+```
+cd /var/discourse
+./launcher rebuild app
+```
+
+### Stand-alone
 
 Just two easy steps. From your main discourse do:
 
     cd plugins
-    git clone https://github.com/werweisswas/discourse-plugin-tagger.git   # clone the repo here
+    git clone https://github.com/werweisswas/discourse-plugin-tagger.git tagger  # clone the repo here
     cd ..
     export RAILS_ENV=production                 # set to productions
-    rake tagger:install:migrations              # copy migrations
-    rake db:migrate SCOPE=tagger                # run migrations
+    cp tagger/db/migrate/* db/migrate/          # copy migrations
+    rake db:migrate                             # run migrations
     rake assets:precompile                      # precompile assets
 
 ## Changelog:
+
+ * 2015-02-23:
+   - fix migrations
+   - add support docker instance
 
  * 2014-06-04
   - merge @eviltrout's plugin-outlet fixes.
