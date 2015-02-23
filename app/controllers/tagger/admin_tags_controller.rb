@@ -41,8 +41,8 @@ module Tagger
         Tag.find(params[:id])
       end
 
-      def tag_params()
-        params.permit(:title, :info)
+      def tag_params
+        params.permit(:title, :info, :listable)
       end
   end
 end

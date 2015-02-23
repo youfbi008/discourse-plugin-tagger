@@ -7,6 +7,7 @@ Discourse.Tag = Discourse.Model.extend({
       data: {
         id: this.get("id"),
         info: this.get("info"),
+        listable: this.get("listable"),
         title: this.get('title')
       }
     });

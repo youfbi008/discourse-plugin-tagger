@@ -16,6 +16,8 @@
         <button class='btn btn-small' {{action 'startMergeTag' editing}}><i class='fa fa-code-fork'></i>merge</button>
         <button class='btn btn-small cancel' {{action 'deleteTag' editing}}><i class='fa fa-trash-o'></i>delete</button> <br>
         {{textarea placeholder="tag info" value=editing.new_info}}<br>
+        {{input type="checkbox" checked=editing.listable}}
+        List for search engines<br>
         <button class='btn btn-small ok no-text' {{action 'saveTag' editing}}><i class='fa fa-check'></i></button>
         <button class='btn btn-small no-text' {{action 'cancelExpand' editing}}><i class='fa fa-times'></i></button>
     </div>

@@ -9,7 +9,21 @@ module TopicExtender
 	end
 end
 
+
 Topic.send(:include, TopicExtender)
+
+module AddTagsToCategories
+    # def self.included(klass)
+    #     klass.attributes :listable_tags
+    # end
+
+    def listable_tags
+        Tagger::Tag.where(:listable => true)
+    end
+end
+
+
+CategoryList.send(:include, AddTagsToCategories)
 
 
 # add the tags to the serializer
