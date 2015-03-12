@@ -32,7 +32,7 @@ var TagsMixin = Ember.Mixin.create({
             return;
         }
 
-        Discourse.ajax(url).then(function(resp){
+        Discourse.ajax(url, {cache: true}).then(function(resp){
             TAGS_CACHE[url] = resp.cloud;
             this.set("tags", resp.cloud);
             this.set("loading", false);
