@@ -79,7 +79,16 @@ module Tagger
       @list = TopicList.new(:tag, current_user, topics_query)
       
       respond_to do |format|
-        format.html { render template: 'list/list' }
+        format.html do 
+          @headline = @tag.title
+          @description_meta = @tag.title
+          if @tag.listable?
+            @robots_meta_index, @robots_meta_follow = 'index', 'follow'
+          else
+            @robots_meta_index, @robots_meta_follow = 'noindex', 'nofollow' 
+          end
+          render template: 'list/list'
+        end
         format.json { render_serialized(@list, TopicListSerializer) }
       end
     end
