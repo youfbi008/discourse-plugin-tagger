@@ -30,5 +30,5 @@ register_asset "stylesheets/tag_styles.scss"
 register_asset "stylesheets/tag_styles_mobile.scss", :mobile
 
 after_initialize do
-	require_dependency File.expand_path('../integrate.rb', __FILE__)
+  require_dependency File.expand_path('../integrate.rb', __FILE__)
 end
