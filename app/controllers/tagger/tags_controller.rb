@@ -74,6 +74,7 @@ module Tagger
     def get_topics_per_tag
       params.require(:tag)
       @tag = Tag.find_by("title = ?", params[:tag])
+      @title = @tag.title
       return render json: false if @tag.blank?
 
       @list = TopicList.new(:tag, current_user, topics_query)
