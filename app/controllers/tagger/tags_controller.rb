@@ -1,7 +1,6 @@
 module Tagger
   class TagsController < ApplicationController
     include CurrentUser
-    include Tags::TopExpertsAction
 
     before_action :check_user, only: [:set_tags]
 

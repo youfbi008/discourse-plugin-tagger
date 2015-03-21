@@ -1,5 +1,3 @@
-require "tagger/engine"
-
 module Tagger
   # add our tags to the topics
   module TopicExtender
