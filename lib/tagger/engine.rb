@@ -1,5 +1,3 @@
-require_dependency "#{config.root}/lib/integrate.rb"
-
 module Tagger
   class Engine < ::Rails::Engine
     isolate_namespace Tagger

@@ -1,3 +1,5 @@
+require File.expand_path('../tagger/engine', __FILE__)
+
 module Tagger
   # add our tags to the topics
   module TopicExtender
