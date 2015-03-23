@@ -7,10 +7,6 @@ module Tagger
   end
 
   module AddTagsToCategories
-    # def self.included(klass)
-    #     klass.attributes :listable_tags
-    # end
-
     def listable_tags
       Tagger::Tag.where(:listable => true)
     end
