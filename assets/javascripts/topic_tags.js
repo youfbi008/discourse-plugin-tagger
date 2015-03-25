@@ -96,7 +96,7 @@ Discourse.TaggedView = Discourse.View.extend({
 });
 
 Discourse.Route.buildRoutes(function() {
-  this.resource('tagged', {path: "tag"}, function() {
+  this.resource('tagged', {path: "themen"}, function() {
     this.route('tag', { path: '/:tag' });
     this.route('cloud', { path: '/' });
   });
