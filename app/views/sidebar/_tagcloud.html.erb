@@ -2,6 +2,6 @@
   <hr>
   <h2>Related Tags</h2>
   <%- object.tags.each do |tag| %>
-    <%= link_to(tag.title, tag_path(tag), class: "tagger-tag cloud-#{tag.count}") %>
+    <%= link_to(tag.title, tag_path(tag: tag.title), class: "tagger-tag cloud-#{tag.count}") %>
   <%- end %>
 <%- end %>
