@@ -11,7 +11,8 @@ var TagsMixin = Ember.Mixin.create({
     }.property("currentControllerName"),
 
     is_category_page: function(){
-        return this.get("currentControllerName") === "discovery.category";
+        return (this.get("currentControllerName") === "discovery.category"
+                        || this.get("currentControllerName") === "discovery.parentCategory");
     }.property("currentControllerName"),
 
     is_tags_page: function(){
@@ -62,7 +63,7 @@ var TagsMixin = Ember.Mixin.create({
 
     categoryTagsTagsUrl: function(){
         var controller = this.get("currentController");
-            // inside a specific category we only want related to that cat
+        // inside a specific category we only want related to that cat
         if (!controller.params || !controller.params.slug){
             return;
         }
@@ -118,13 +119,13 @@ var SidebarCategoryRelatedTagsView = Discourse.View.extend(TagsMixin, {
 
 var SidebarCombinedTagsView = Discourse.View.extend(TagsMixin, {
     shouldBeHidden: false,
-    tagsUrl: function(){
-        if (this.get("is_topic_page")){
+    tagsUrl: function() {
+        if (this.get("is_topic_page")) {
             return this.get("topicTagsUrl");
         } else if (this.get("is_tags_page")) {
             return this.get("tagsTagsUrl");
         } else if (this.get("is_category_page")) {
-            return this.get("categoryTagsUrl");
+            return this.get("categoryTagsTagsUrl");
         } else {
             return "/tagger/tags/cloud";
         }
