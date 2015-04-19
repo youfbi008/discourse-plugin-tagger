@@ -69,9 +69,15 @@ Discourse.TaggedTagRoute = Discourse.Route.extend({
   },
   setupController: function(controller, model) {
     this.controllerFor('discovery/topics').setProperties({
-       "model": model,
-       "tagname": this.get("tag")
+       model: model,
+       tagname: this.get("tag"),
+       order: model.get('params.order'),
+       ascending: model.get('params.ascending')
      });
+    this.controllerFor('navigation/default').setProperties({
+      order: model.get('params.order'),
+      ascending: model.get('params.ascending')
+    });
   },
   renderTemplate: function() {
     var controller = this.controllerFor('discovery/topics');
