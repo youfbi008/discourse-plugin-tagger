@@ -18,6 +18,7 @@ register_asset "javascripts/vendor/typeahead.bundle.js"
 register_asset "javascripts/vendor/bootstrap-tagsinput.js"
 register_asset "javascripts/composer_tagging.js"
 register_asset "javascripts/topic_tags.js"
+register_asset "javascripts/discourse/tags_mixin.js.es6"
 
 # admin UI
 register_asset "javascripts/discourse/templates/tags_admin.js.handlebars"
