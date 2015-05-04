@@ -62,7 +62,16 @@ Discourse.TopicController.reopen({
 
 // topics of tags views
 
-Discourse.TaggedTagRoute = Discourse.Route.extend({
+Discourse.TaggedController = Discourse.Controller.extend({
+  needs: ['discovery/topics', 'navigation/default'],
+  actions: {
+    refresh: function(url) {
+      this.get('controllers.discovery/topics').send('refresh', url);
+    }
+  }
+});
+
+Discourse.TaggedTagRoute = Discourse.Route.extend(Discourse.ScrollTop, {
   model: function(params){
     this.set("tag", params.tag);
     return Discourse.TopicList.find("tagger/tag/" + params.tag, {});
@@ -83,6 +92,17 @@ Discourse.TaggedTagRoute = Discourse.Route.extend({
     var controller = this.controllerFor('discovery/topics');
     this.render('tag_topic_list_head', { controller: controller, outlet: 'navigation-bar' });
     this.render('discovery/topics', { controller: controller, outlet: 'list-container'});
+  },
+
+  actions: {
+    loadingComplete: function() {
+      this.controllerFor('discovery').set('loading', false);
+      this._scrollTop();
+    },
+    didTransition: function() {
+      this.send('loadingComplete');
+      return true;
+    }
   }
 });
 
@@ -96,7 +116,7 @@ Discourse.TaggedCloudRoute = Discourse.Route.extend({
   }
 });
 
-Discourse.TaggedView = Discourse.View.extend({
+Discourse.TaggedView = Discourse.View.extend(Discourse.ScrollTop, Discourse.UrlRefresh, {
   templateName: "discovery",
   classNames: ['tag-topic-list']
 });
