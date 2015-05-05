@@ -17,7 +17,7 @@ end
 
 Rails.application.routes.draw do
   scope module: 'tagger' do
-    get "/themen/:tag" => "tags#get_topics_per_tag", as: 'tag'
-    get "/themen" => "tags#cloud"
+    get "/tag/:tag" => "tags#get_topics_per_tag"
+    get "/tag/" => "tags#cloud"
   end
 end
