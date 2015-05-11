@@ -77,14 +77,14 @@ module Tagger
       return render json: false if @tag.blank?
 
       @list = TopicList.new(:tag, current_user, topics_query)
-      
+
       respond_to do |format|
-        format.html do 
+        format.html do
           @title = @description_meta = @headline = @tag.title
           if @tag.listable?
             @robots_meta_index, @robots_meta_follow = 'index', 'follow'
           else
-            @robots_meta_index, @robots_meta_follow = 'noindex', 'nofollow' 
+            @robots_meta_index, @robots_meta_follow = 'noindex', 'nofollow'
           end
           render template: 'list/list'
         end
@@ -151,12 +151,16 @@ module Tagger
       end
 
       def topics_query(options={})
+        order = TopicQuery::SORTABLE_MAPPING[params[:order]] || 'bumped_at'
+        dir = (params[:ascending] == "true") ? "ASC" : "DESC"
+
         Topic.
           where(category_id: category_list).
           where(deleted_at: nil).
           where(visible: true).
           where("archetype <> ?", Archetype.private_message).
-          where("id in (SELECT topic_id FROM tagger_tags_topics WHERE tag_id = ?)", @tag.id)
+          where("id in (SELECT topic_id FROM tagger_tags_topics WHERE tag_id = ?)", @tag.id).
+          order("#{order} #{dir}")
       end
 
       def category_list
