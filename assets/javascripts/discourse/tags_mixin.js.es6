@@ -66,7 +66,7 @@ export default Ember.Mixin.create({
       return;
     }
     return "/tagger/tags/cloud/category/" + controller.params.slug;
-  }.property("currentController"),
+  }.property("currentController.params.slug"),
 
   shouldBeHidden: function() {
     return !this.get("is_topic_page") &&

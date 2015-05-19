@@ -52,7 +52,7 @@ var SidebarCombinedTagsView = Discourse.View.extend(TagsMixin, {
         } else {
             return "/tagger/tags/cloud";
         }
-    }.property("currentControllerName")
+    }.property('is_topic_page', 'topicTagsUrl', 'is_tags_page', 'tagsTagsUrl', 'is_category_page', 'categoryTagsTagsUrl')
 });
 
 export default {
