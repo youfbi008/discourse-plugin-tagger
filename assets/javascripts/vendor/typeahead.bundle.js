@@ -714,9 +714,8 @@
         },
         dropdown: {
             position: "absolute",
-            top: "100%",
-            left: "0",
-            zIndex: "100",
+            bottom: "30%",
+            zIndex: 3000,
             display: "none"
         },
         suggestions: {
