@@ -729,7 +729,7 @@
             whiteSpace: "normal"
         },
         ltr: {
-            left: "0",
+            left: "30%",
             right: "auto"
         },
         rtl: {
