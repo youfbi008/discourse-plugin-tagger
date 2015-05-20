@@ -714,7 +714,8 @@
         },
         dropdown: {
             position: "absolute",
-            bottom: "30%",
+            bottom: "80%",
+            left: "10px",
             zIndex: 3000,
             display: "none"
         },
@@ -729,8 +730,8 @@
             whiteSpace: "normal"
         },
         ltr: {
-            left: "30%",
-            right: "auto"
+            left: "",
+            right: ""
         },
         rtl: {
             left: "auto",
@@ -1613,7 +1614,7 @@
             try {
                 !$input.attr("dir") && $input.attr("dir", "auto");
             } catch (e) {}
-            return $input.wrap($wrapper).parent().prepend(withHint ? $hint : null).append($dropdown);
+            return $input.wrap($wrapper).parent().prepend(withHint ? $hint : null).parent().append($dropdown);
         }
         function getBackgroundStyles($el) {
             return {
