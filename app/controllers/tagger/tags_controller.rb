@@ -9,7 +9,7 @@ module Tagger
       @tags = Tag.all
       if params[:search]
         search = "%#{params[:search]}%"
-        @tags = @tags.where("title LIKE :search", search: search)
+        @tags = @tags.where("LOWER(title) LIKE :search", search: search.downcase)
       end
       if params[:limit]
         @tags = @tags.limit(params[:limit].to_i)
