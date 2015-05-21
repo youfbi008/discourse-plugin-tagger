@@ -13,6 +13,10 @@ export default Ember.View.extend({
     } else {
       tagsinput.attr('placeholder', I18n.t('tagger.placeholder'));
     }
+
+    var scrollableContainer = tagsinput.parent().parent();
+    var leftPos = scrollableContainer.scrollLeft();
+    scrollableContainer.animate({scrollLeft: leftPos + 200}, 200);
   }.observes('tags.@each'),
 
   _startTypeahead: function(){
