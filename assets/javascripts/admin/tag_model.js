@@ -12,6 +12,7 @@ Discourse.Tag = Discourse.Model.extend({
       }
     });
   },
+
   merge: function(source){
     return Discourse.ajax("/tagger/admin/merge", {
       type: "POST",
@@ -21,6 +22,7 @@ Discourse.Tag = Discourse.Model.extend({
       }
     });
   },
+
   destroy: function() {
     return Discourse.ajax("/tagger/admin", {
       type: "DELETE",
@@ -32,6 +34,20 @@ Discourse.Tag = Discourse.Model.extend({
 });
 
 Discourse.Tag.reopenClass({
+  filter: function(tagFilter) {
+    return Discourse.ajax("/tagger/admin/filter.json", {
+      type: "POST",
+      data: {
+        filter: tagFilter,
+      }
+    })
+    .then(function(tags) {
+      return tags.map(function(u) {
+        return Discourse.Tag.create(u);
+      });
+    });
+  },
+
   findAll: function() {
     return Discourse.ajax("/tagger/admin.json")
     .then(function(tags) {
