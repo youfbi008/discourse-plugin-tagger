@@ -1,14 +1,14 @@
 {{#if editingTopic}}
-    <div class="tagger-tags-view edit">
-        {{tags-selector tags=new_tags}}
-    </div>
+  <div class="tagger-tags-view edit">
+    {{tags-selector tags=new_tags}}
+  </div>
 {{else}}
-    {{#if model.tags}}
-    	<div class="tagger-tags-view">
-    		<span>tagged:</span>
-    	  {{#each model.tags}}
-    		<a href="/tag/{{unbound this}}" class="tagger-tag">{{this}}</a>
-    	  {{/each}}
-    	</div>
-    {{/if}}
+  {{#if model.tags}}
+    <div class="tagger-tags-view">
+      <span>tagged:</span>
+      {{#each model.tags}}
+        <a href="/tag/{{unbound this}}" class="tagger-tag">{{this}}</a>
+      {{/each}}
+    </div>
+  {{/if}}
 {{/if}}
