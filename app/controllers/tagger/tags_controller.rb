@@ -86,7 +86,12 @@ module Tagger
           else
             @robots_meta_index, @robots_meta_follow = 'noindex', 'nofollow'
           end
-          render template: 'list/list'
+
+          if use_crawler_layout?
+            render template: 'list/list.crawler'
+          else
+            render template: 'list/list'
+          end
         end
         format.json { render_serialized(@list, TopicListSerializer) }
       end
