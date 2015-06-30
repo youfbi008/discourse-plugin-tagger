@@ -159,10 +159,9 @@ module Tagger
         order = TopicQuery::SORTABLE_MAPPING[params[:order]] || 'bumped_at'
         dir = (params[:ascending] == "true") ? "ASC" : "DESC"
 
-        Topic.
+        Topic.secured.visible.
           where(category_id: category_list).
           where(deleted_at: nil).
-          where(visible: true).
           where("archetype <> ?", Archetype.private_message).
           where("id in (SELECT topic_id FROM tagger_tags_topics WHERE tag_id = ?)", @tag.id).
           order("#{order} #{dir}")
