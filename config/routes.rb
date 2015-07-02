@@ -1,5 +1,9 @@
 Tagger::Engine.routes.draw do
   resource :admin_tag, path: "/admin", constraints: AdminConstraint.new do
+    member do 
+      post 'filter' => 'admin_tags#filter'
+    end
+
     collection do
       post "merge" => "admin_tags#merge"
     end

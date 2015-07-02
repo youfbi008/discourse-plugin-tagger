@@ -5,6 +5,16 @@ export default Ember.View.extend({
   classNameBindings: ['hasFocus:has-focus'],
   template: Ember.Handlebars.compile('<input type="text" placeholder="{{i18n \'tagger.placeholder\'}}" value="{{unbound view.tags}}">'),
 
+  // The Android keyboard overlaps with the tagger input field. 
+  // As a workaround we downsize the textarea
+  focusIn : function() {
+    $('.wmd-controls').addClass('wmd-controls-small');
+  },
+
+  focusOut : function() {
+    $('.wmd-controls').removeClass('wmd-controls-small');
+  },
+
   updatePlaceholder: function() {
     var tagsinput = this.$('> input').tagsinput('input');
 
@@ -13,6 +23,10 @@ export default Ember.View.extend({
     } else {
       tagsinput.attr('placeholder', I18n.t('tagger.placeholder'));
     }
+
+    var scrollableContainer = tagsinput.parent().parent();
+    var leftPos = scrollableContainer.scrollLeft();
+    scrollableContainer.animate({scrollLeft: leftPos + 200}, 200);
   }.observes('tags.@each'),
 
   _startTypeahead: function(){

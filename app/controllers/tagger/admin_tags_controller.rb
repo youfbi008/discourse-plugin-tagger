@@ -1,7 +1,15 @@
 module Tagger
   class AdminTagsController < Admin::AdminController
     def show
-      tags = Tag.all.order(:title)
+      tags = [] # We have too many tags to load them in advance
+
+      render json: tags.to_json
+    end
+
+    def filter
+      title_filter = "%#{params[:filter]}%"
+      tags = Tag.where("title LIKE ?", title_filter).limit(100)
+
       render json: tags.to_json
     end
 
