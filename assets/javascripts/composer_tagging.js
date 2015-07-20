@@ -11,6 +11,7 @@ Discourse.Composer.reopen({
       var tagger = Discourse.ajax('/tagger/set_tags', {
                      data: {
                        tags: tags,
+                       initial: true,
                        topic_id: post_result.post.topic_id
                      }
                    });
@@ -40,6 +41,7 @@ Discourse.Composer.reopen({
       var after_tags = Discourse.ajax('/tagger/set_tags', {
                          data: {
                            tags: tags,
+                           initial: false,
                            topic_id: post.get("topic_id")
                          }
                        });

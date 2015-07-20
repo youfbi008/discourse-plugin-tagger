@@ -1,3 +1,4 @@
+require_dependency "common_tags/common_tags"
 module Tagger
   class TagsController < ApplicationController
     include CurrentUser
@@ -105,6 +106,11 @@ module Tagger
       end
 
       tag_names = params[:tags].split(",")
+      if tag_names.length == 0 && params[:initial]
+        if @topic.archetype == "question"
+          tag_names = CommonTags::common_tags (@topic.title.to_s + "\n" + @topic.posts.first.cooked)
+        end
+      end
       tags = Tag.all().where("title in (:tag_names)", tag_names: tag_names)
       if tags.length != tag_names and current_user.has_trust_level?(trust_level)
         # more tags given than currently found
