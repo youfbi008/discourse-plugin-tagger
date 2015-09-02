@@ -3,7 +3,7 @@
 export default Ember.View.extend({
 	// className: "tags-selector span4",
   classNameBindings: ['hasFocus:has-focus'],
-  template: Ember.Handlebars.compile('<input type="text" placeholder="{{i18n \'tagger.placeholder\'}}" value="{{unbound view.tags}}">'),
+  template: Ember.Handlebars.compile('<input id="tagger-tagsinput" type="text" placeholder="{{i18n \'tagger.placeholder\'}}" value="{{unbound view.tags}}">'),
 
   // The Android keyboard overlaps with the tagger input field. 
   // As a workaround we downsize the textarea

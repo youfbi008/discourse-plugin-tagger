@@ -51,6 +51,7 @@ Discourse.TopicController.reopen({
     Discourse.ajax('/tagger/set_tags', {
                         data: {
                           tags: tags.join(","),
+                          initial: false,
                           topic_id: topic.get("id")
                         }
                       })

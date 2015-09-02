@@ -4,7 +4,6 @@
     <i class="fa fa-spin fa-spinner"></i>
 {{else}}
     {{#each tag in view.tags}}
-        <a href="/tag/{{unbound tag.title}}" class="tagger-tag cloud-{{unbound tag.count}}">{{tag.title}}</a>
         {{tag-link tag}}
     {{else}}
         <span class="non-found">{{i18n 'related_tags.not_found'}}</span>
