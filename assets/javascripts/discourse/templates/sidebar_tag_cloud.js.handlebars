@@ -1,11 +1,11 @@
 <h2>{{i18n 'related_tags.title'}}</h2>
-<hr>
+
 {{#if view.loading}}
-    <i class="fa fa-spin fa-spinner"></i>
+  <i class="fa fa-spin fa-spinner"></i>
 {{else}}
-    {{#each tag in view.tags}}
-        {{tag-link tag}}
-    {{else}}
-        <span class="non-found">{{i18n 'related_tags.not_found'}}</span>
-    {{/each}}
+  {{#each tag in view.tags}}
+    {{tag-link tag}}
+  {{else}}
+    <span class="non-found">{{i18n 'related_tags.not_found'}}</span>
+  {{/each}}
 {{/if}}
