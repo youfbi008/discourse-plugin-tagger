@@ -41,7 +41,7 @@ var SidebarCategoryRelatedTagsView = Discourse.View.extend(TagsMixin, {
 });
 
 var SidebarCombinedTagsView = Discourse.View.extend(TagsMixin, {
-    shouldBeHidden: false,
+    shouldBeHidden: Em.computed.equal("currentControllerName", "full-page-search"),
     tagsUrl: function() {
         if (this.get("is_topic_page")) {
             return this.get("topicTagsUrl");

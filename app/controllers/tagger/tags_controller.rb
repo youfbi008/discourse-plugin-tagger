@@ -127,6 +127,7 @@ module Tagger
       end
 
       @topic.tags = tags
+      @topic.save!
       render json: @topic.tags.map{|t| t.title}
     end
 
