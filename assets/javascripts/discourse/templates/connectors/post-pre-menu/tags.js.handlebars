@@ -1,5 +1,7 @@
 {{#if controller.model.tags}}
   <div class="tagger-tags-pre-menu-view">
+    {{fa-icon "tags"}}
+
     {{#each tag in controller.model.tags}}
       {{tag-link tag}}
     {{/each}}
