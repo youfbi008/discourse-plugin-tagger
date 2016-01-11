@@ -10,6 +10,10 @@ Discourse.AdminTemplatesAdminView.reopen({
 });
 
 Discourse.TaggerRoute = Discourse.AdminRoute.extend({
+  activate: function() {
+    this._super();
+    Ember.$('body').addClass('global-hide-categories-sidebar');
+  }
  // this is just an empty admin route so that we are shown under the menu, too
 });
 
